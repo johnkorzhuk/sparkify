@@ -17,8 +17,8 @@ class NavContainer extends Component {
   handleLogin = route => {
     const { authenticated, history } = this.props
 
-    if (authenticated && route !== "register") {
-      console.log("push to /giveaways")
+    if (authenticated && route === "login") {
+      history.push("/giveaways")
     } else {
       console.log("push to /login")
     }

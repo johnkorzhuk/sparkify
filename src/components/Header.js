@@ -30,11 +30,11 @@ const Logo = styled(Link)`
   margin-right: 10px;
 `
 
-const Header = () => {
+const Header = ({ authenticated }) => {
   return (
     <HeaderContainer>
       <LogoContainer>
-        <Logo to="/" />
+        <Logo to={authenticated ? "/giveaways" : "/"} />
         <h1>Sparkify</h1>
       </LogoContainer>
       <Nav />

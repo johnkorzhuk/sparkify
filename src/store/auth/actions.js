@@ -115,10 +115,9 @@ export const logout = auth => async dispatch => {
   }
 }
 
-export const startListeningToAuthChanges = (auth, router) => dispatch => {
+export const startListeningToAuthChanges = auth => dispatch => {
   return auth.onAuthStateChanged(async user => {
     if (user) {
-      console.log(user)
       dispatch(loginAction(user))
     } else {
       dispatch(logoutAction())

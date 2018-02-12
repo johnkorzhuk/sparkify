@@ -1,6 +1,5 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
-// import { compose } from "redux"
 
 import { signup, login } from "../store/auth/actions"
 import { selectAuthenticatedState } from "../store/auth/selectors"
@@ -30,10 +29,13 @@ class LoginPageContaner extends Component {
     },
   }
 
-  componentDidMount() {
-    const { match, authenticated, history } = this.props
-
-    if (match.path === "/login" && authenticated) history.push("/giveaways")
+  componentWillReceiveProps(nextProps) {
+    if (
+      this.props.authenticated !== nextProps.authenticated &&
+      nextProps.authenticated
+    ) {
+      this.props.history.push("/giveaways")
+    }
   }
 
   handleConfirmBlur = e => {

@@ -16,6 +16,7 @@ class Firebase {
     firebase.initializeApp(config)
     this.store = firebase.firestore()
     this.auth = firebase.auth()
+    this.storage = firebase.storage().ref()
     this._config(custom)
   }
 
