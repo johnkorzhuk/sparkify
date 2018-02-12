@@ -2,7 +2,7 @@ import React from "react"
 import { Row, Col } from "antd"
 
 import { Container } from "../styled"
-import GiveawayForm from "../forms/Giveaway"
+import GiveawayForm from "../forms/GiveawaySubmission"
 
 const SubmitGiveaway = props => {
   return (

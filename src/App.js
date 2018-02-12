@@ -12,11 +12,34 @@ import HomePage from "./components/pages/Home"
 import FAQPage from "./components/pages/FAQ"
 import LoginPage from "./containers/LoginPage"
 import SubmitGiveawayPage from "./containers/SubmitGiveawayPage"
+import GiveawaysPage from "./containers/GiveawaysPage"
+
+// import { generateGiveaways } from "./store/giveaways/utils"
 
 class App extends Component {
   componentDidMount() {
     const { startListeningToAuthChanges } = this.props
     this.authListener = startListeningToAuthChanges(firebase.auth)
+
+    // const generated = generateGiveaways(200)
+    // await Promise.all([
+    //   ...generated.map(data =>
+    //     firebase.store
+    //       .collection("giveaways")
+    //       .doc(data.id)
+    //       .set(data),
+    //   ),
+    //   ...generated.map(data =>
+    //     firebase.store
+    //       .collection("users")
+    //       .doc("oNFMES0YaOfyfAsEjY4AImsTwl22")
+    //       .collection("giveaways")
+    //       .doc(data.id)
+    //       .set({
+    //         id: data.id,
+    //       }),
+    //   ),
+    // ])
   }
 
   render() {
@@ -31,6 +54,7 @@ class App extends Component {
             <Route path="/faq" component={FAQPage} />
             <Route path="/register" component={LoginPage} />
             <Route path="/submit" component={SubmitGiveawayPage} />
+            <Route path="/giveaways" component={GiveawaysPage} />
           </Switch>
           <Footer />
         </div>

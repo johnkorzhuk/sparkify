@@ -13,52 +13,14 @@ import {
   Icon,
 } from "antd"
 
+import { LOCATIONS, CATEGORIES, TYPES } from "../../config"
+
 const FormItem = Form.Item
 const { MonthPicker } = DatePicker
 const { Option } = Select
 const { TextArea } = Input
 const RadioGroup = Radio.Group
 const RadioButton = Radio.Button
-
-const location = ["U.S.A", "Canada", "Mexico", "Europe", "Worldwide"]
-const categories = [
-  {
-    value: "tech",
-    label: "Tech",
-    children: [
-      {
-        value: "accessories",
-        label: "Accessories",
-      },
-      {
-        value: "cellphones-tablets",
-        label: "Cell phones & Tablets",
-      },
-    ],
-  },
-  {
-    value: "books",
-    label: "Books",
-  },
-  {
-    value: "other",
-    label: "Other",
-  },
-  {
-    value: "gaming",
-    label: "Gaming",
-    children: [
-      {
-        value: "game-keys",
-        label: "Game keys",
-      },
-      {
-        value: "skins",
-        label: "Skins",
-      },
-    ],
-  },
-]
 
 const GiveawaySubmissionForm = ({
   getFieldDecorator,
@@ -112,7 +74,7 @@ const GiveawaySubmissionForm = ({
           rules: [{ required: true, message: "Required" }],
         })(
           <Select placeholder="Please select a country">
-            {location.map(loc => (
+            {LOCATIONS.map(loc => (
               <Option value={loc} key={loc}>
                 {loc}
               </Option>
@@ -126,9 +88,11 @@ const GiveawaySubmissionForm = ({
           rules: [{ required: true, message: "Required" }],
         })(
           <RadioGroup>
-            <RadioButton value="a">item 1</RadioButton>
-            <RadioButton value="b">item 2</RadioButton>
-            <RadioButton value="c">item 3</RadioButton>
+            {TYPES.map(type => (
+              <RadioButton value={type} key={type}>
+                {type}
+              </RadioButton>
+            ))}
           </RadioGroup>,
         )}
       </FormItem>
@@ -136,11 +100,11 @@ const GiveawaySubmissionForm = ({
       <FormItem label="Category" hasFeedback>
         {getFieldDecorator("category", {
           rules: [{ type: "array", required: true, message: "required" }],
-        })(<Cascader options={categories} />)}
+        })(<Cascader options={CATEGORIES} />)}
       </FormItem>
 
       <FormItem label="End date / time">
-        {getFieldDecorator("end-date", timePickerConfig)(
+        {getFieldDecorator("endDate", timePickerConfig)(
           <DatePicker showTime format="DD-MM-YYYY HH:mm:ss" />,
         )}
       </FormItem>

@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "babel-plugin-import": "^1.6.3",
+    "faker": "^4.1.0",
     "react-app-rewired": "^1.4.1",
     "redux-devtools-extension": "^2.13.2",
     "redux-logger": "^3.0.6"
