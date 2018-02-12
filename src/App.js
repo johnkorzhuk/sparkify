@@ -9,6 +9,7 @@ import { selectAuthenticatedState } from "./store/auth/selectors"
 import Header from "./components/Header"
 import Footer from "./components/Footer"
 import HomePage from "./components/pages/Home"
+import FAQPage from "./components/pages/FAQ"
 import LoginPage from "./containers/LoginPage"
 import SubmitGiveawayPage from "./containers/SubmitGiveawayPage"
 
@@ -27,6 +28,7 @@ class App extends Component {
           <Switch>
             <Route path="/" exact component={HomePage} />
             <Route path="/login" component={LoginPage} />
+            <Route path="/faq" component={FAQPage} />
             <Route path="/register" component={LoginPage} />
             <Route path="/submit" component={SubmitGiveawayPage} />
           </Switch>

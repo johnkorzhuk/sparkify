@@ -6,48 +6,57 @@ import { withRouter } from "react-router-dom"
 import { logout } from "../store/auth/actions"
 import { selectAuthenticatedState } from "../store/auth/selectors"
 import firebase from "../services/firebase"
+import { AUTHED_ROUTES } from "../config"
 
 import Nav from "../components/Nav"
 
 class NavContainer extends Component {
-  handleLogout = () => {
-    const { logout } = this.props
+  handleLogout = async () => {
+    const { logout, history } = this.props
+    await logout(firebase.auth)
+    history.replace("/")
   }
 
   handleLogin = route => {
     const { authenticated, history } = this.props
 
     if (authenticated && route === "login") {
-      history.push("/giveaways")
+      history.replace("/giveaways")
+      this.forceUpdate()
     } else {
-      console.log("push to /login")
+      history.replace(`/${route}`)
     }
   }
 
   render() {
-    const { photoURL } = this.props
-
+    const { photoURL, authenticated, location } = this.props
+    const authedRoute = AUTHED_ROUTES.some(path =>
+      location.pathname.includes(path),
+    )
     return (
       <Nav
         onLogin={this.handleLogin}
         onLogout={this.handleLogout}
         photoURL={photoURL}
+        authenticated={authenticated}
+        authedRoute={authedRoute}
+        pathname={location.pathname}
       />
     )
   }
 }
 
 const enhance = compose(
+  withRouter,
   connect(
     state => {
       return {
-        photoURL: state.auth.photoURL,
+        photoURL: state.auth.user.photoURL,
         authenticated: selectAuthenticatedState(state),
       }
     },
     { logout },
   ),
-  withRouter,
 )
 
 export default enhance(NavContainer)
