@@ -57,9 +57,9 @@ const GiveawayFilters = () => {
 
   const sort_menu = (
     <Menu onClick={onChange}>
-      <Menu.Item key="value">value</Menu.Item>
+      <Menu.Item key="value">Value</Menu.Item>
       <Menu.Item key="date">Date</Menu.Item>
-      <Menu.Item key="another">Another thing?</Menu.Item>
+      <Menu.Item key="another">Entered</Menu.Item>
     </Menu>
   )
 
@@ -69,7 +69,11 @@ const GiveawayFilters = () => {
         <Search placeholder="Filter" onSearch={value => console.log(value)} />
       </SearchFormItem>
       <CascaderFormItem>
-        <StyledCascader options={CATEGORIES} placeholder="Categories" />
+        <StyledCascader
+          options={CATEGORIES}
+          placeholder="Categories"
+          changeOnSelect
+        />
       </CascaderFormItem>
       <FormItem>
         <Dropdown overlay={sort_menu}>

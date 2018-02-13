@@ -10,8 +10,12 @@ const StyledRow = styled(Row)`
   max-width: 1000px;
   margin-left: auto !important;
   margin-right: auto !important;
-  margin-top: ${({ itemContainer }) => (itemContainer ? "60px" : 0)};
-  padding: ${({ itemContainer }) => (itemContainer ? 0 : "0 12px")};
+  padding: 0 12px;
+`
+
+const ItemContainer = StyledRow.extend`
+  margin-top: 60px;
+  padding: 0;
 `
 
 const StyledCol = styled(Col)`
@@ -26,13 +30,13 @@ const Giveaways = ({ giveaways }) => {
       <StyledRow>
         <GiveawayFilters />
       </StyledRow>
-      <StyledRow itemContainer gutter={gutter}>
+      <ItemContainer gutter={gutter}>
         {giveaways.map(giveaway => (
           <StyledCol key={giveaway} span={6} gutter={gutter}>
             <GiveawayItem />
           </StyledCol>
         ))}
-      </StyledRow>
+      </ItemContainer>
     </Container>
   )
 }
