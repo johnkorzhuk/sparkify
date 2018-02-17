@@ -1,19 +1,10 @@
 import React from "react"
 import styled from "styled-components"
-import {
-  Input,
-  Checkbox,
-  Cascader,
-  Dropdown,
-  Menu,
-  Button,
-  Icon,
-  Form,
-} from "antd"
+import { Input, Checkbox, Cascader, Select, Button, Icon, Form } from "antd"
 
 import { CATEGORIES, TYPES } from "../../config"
 
-const { Search } = Input
+const { Option } = Select
 const FormItem = Form.Item
 
 const StyledForm = styled(Form)`
@@ -37,6 +28,13 @@ const SearchFormItem = styled(Form.Item)`
   }
 `
 
+const SelectFormItem = styled(Form.Item)`
+  min-width: 110px !important;
+  > .ant-form-item-control-wrapper {
+    width: 100%;
+  }
+`
+
 const CascaderFormItem = styled(Form.Item)`
   flex-grow: 3;
 
@@ -47,50 +45,98 @@ const CascaderFormItem = styled(Form.Item)`
   }
 `
 
-const GiveawayFilters = () => {
-  const onChange = () => null
-  const type_menu = (
-    <Menu onClick={onChange}>
-      {TYPES.map(type => <Menu.Item key={type}>{type}</Menu.Item>)}
-    </Menu>
-  )
+const CloseCircle = styled(({ hasInput, ...props }) => <Icon {...props} />)`
+  color: rgba(0, 0, 0, 0.25);
+  font-size: 12px;
+  cursor: ${({ hasInput }) => (hasInput ? "pointer" : "default")};
+  transition: color 0.3s ease, opacity 0.15s ease;
+  opacity: ${({ hasInput }) => (hasInput ? 1 : 0)};
 
-  const sort_menu = (
-    <Menu onClick={onChange}>
-      <Menu.Item key="value">Value</Menu.Item>
-      <Menu.Item key="date">Date</Menu.Item>
-      <Menu.Item key="another">Entered</Menu.Item>
-    </Menu>
-  )
+  &:hover {
+    color: rgba(0, 0, 0, 0.45);
+  }
+`
 
+const GiveawayFilters = ({
+  search,
+  categories,
+  sort,
+  type,
+  hideViewed,
+  setFilter,
+  resetFilter,
+}) => {
   return (
     <StyledForm layout="inline">
       <SearchFormItem>
-        <Search placeholder="Filter" onSearch={value => console.log(value)} />
+        <Input
+          suffix={
+            <CloseCircle
+              type="close-circle"
+              onClick={() => !!search && resetFilter("searchInput")}
+              hasInput={!!search}
+            />
+          }
+          placeholder="Filter"
+          onChange={e => {
+            setFilter("searchInput", e.target.value)
+          }}
+          value={search}
+        />
       </SearchFormItem>
       <CascaderFormItem>
         <StyledCascader
           options={CATEGORIES}
           placeholder="Categories"
           changeOnSelect
+          type="categories"
+          value={categories}
+          onChange={value => {
+            setFilter("categories", value)
+          }}
         />
       </CascaderFormItem>
+      <SelectFormItem>
+        <Select
+          value={type}
+          onChange={value => {
+            setFilter("type", value)
+          }}
+          placeholder="Type"
+          allowClear
+        >
+          {TYPES.map(type => (
+            <Option key={type} value={type}>
+              {type}
+            </Option>
+          ))}
+        </Select>
+      </SelectFormItem>
+      <SelectFormItem>
+        <Select
+          value={sort.value}
+          onSelect={value => {
+            const order =
+              value === sort.value && sort.order !== "descending"
+                ? "descending"
+                : "acsending"
+            setFilter("sort", value, order)
+          }}
+        >
+          <Option value="value">Value</Option>
+          <Option value="newest">Newest</Option>
+          <Option value="endDate">End Date</Option>
+        </Select>
+      </SelectFormItem>
       <FormItem>
-        <Dropdown overlay={sort_menu}>
-          <Button>
-            Sort By <Icon type="down" />
-          </Button>
-        </Dropdown>
-      </FormItem>
-      <FormItem>
-        <Dropdown overlay={type_menu}>
-          <Button>
-            Type <Icon type="down" />
-          </Button>
-        </Dropdown>
-      </FormItem>
-      <FormItem>
-        <Checkbox onChange={onChange}>Hide Viewed</Checkbox>
+        <Checkbox
+          checked={hideViewed}
+          onChange={e => {
+            setFilter("hideViewed", e.target.checked)
+          }}
+        >
+          Hide Viewed
+        </Checkbox>
       </FormItem>
     </StyledForm>
   )

@@ -1,4 +1,7 @@
+import { combineReducers } from "redux"
+
 import { ADD, SET_ALL_LOADED, SET_LOADING, ERROR } from "./actions"
+import filters from "./filters/reducer"
 
 export const INITIAL_STATE = {
   all: [],
@@ -10,12 +13,12 @@ export const INITIAL_STATE = {
   },
 }
 
-export default (state = INITIAL_STATE, action) => {
+export const rootReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case ADD:
       return {
         ...state,
-        all: [...state.all, ...action.payload.giveaways],
+        all: [...state.all, action.payload.giveaway],
       }
 
     case SET_ALL_LOADED:
@@ -45,3 +48,5 @@ export default (state = INITIAL_STATE, action) => {
       return state
   }
 }
+
+export default combineReducers({ root: rootReducer, filters })

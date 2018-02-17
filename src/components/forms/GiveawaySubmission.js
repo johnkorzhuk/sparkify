@@ -31,6 +31,7 @@ const GiveawaySubmissionForm = ({
   const timePickerConfig = {
     rules: [{ type: "object", required: true, message: "Required" }],
   }
+  // TODO: make title max 25 characters
   return (
     <Form onSubmit={onSubmit}>
       <FormItem label="Title" hasFeedback>

@@ -1,8 +1,8 @@
 import React from "react"
-import { Row, Col } from "antd"
+import { Row, Col, Button } from "antd"
 import styled from "styled-components"
 
-import GiveawayFilters from "../forms/GiveawaysFilters"
+import GiveawayFilters from "../../containers/GiveawayFilters"
 import { Container } from "../styled"
 import GiveawayItem from "../GiveawayPreviewItem"
 
@@ -20,22 +20,36 @@ const ItemContainer = StyledRow.extend`
 
 const StyledCol = styled(Col)`
   padding-bottom: ${({ gutter }) => `${gutter}px`};
+  list-style: none;
 `
 
-const Giveaways = ({ giveaways }) => {
-  const gutter = 24
+const StyledButton = styled(Button)`
+  margin-top: 10px;
+`
+
+const Giveaways = ({ giveaways, resetAllFilters, hasChanged }) => {
+  const gutter = 32
 
   return (
     <Container>
       <StyledRow>
         <GiveawayFilters />
+        <StyledButton
+          type="dashed"
+          size="small"
+          onClick={resetAllFilters}
+          disabled={!hasChanged}
+        >
+          Reset All
+        </StyledButton>
       </StyledRow>
       <ItemContainer gutter={gutter}>
-        {giveaways.map(giveaway => (
-          <StyledCol key={giveaway} span={6} gutter={gutter}>
-            <GiveawayItem />
-          </StyledCol>
-        ))}
+        {giveaways &&
+          giveaways.map(giveaway => (
+            <StyledCol key={giveaway.id} span={6} gutter={gutter}>
+              <GiveawayItem {...giveaway} />
+            </StyledCol>
+          ))}
       </ItemContainer>
     </Container>
   )

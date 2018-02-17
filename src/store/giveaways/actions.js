@@ -1,14 +1,14 @@
 // ACTIONS
-export const ADD = "giveaways/ADD"
+export const ADD = "giveaways/ADD_GIVEAWAY"
 export const SET_ALL_LOADED = "giveaways/SET_ALL_LOADED"
 export const SET_LOADING = "giveaways/SET_LOADING"
 export const ERROR = "giveaways/ERROR"
 
 // ACTION CREATORS
-export const addGiveawaysAction = giveaways => ({
+export const addGiveawayAction = giveaway => ({
   type: ADD,
   payload: {
-    giveaways,
+    giveaway,
   },
 })
 
@@ -34,14 +34,16 @@ export const errorAction = message => ({
 })
 
 // BOUND ACTION CREATORS
-export const addGiveaways = giveaways => dispatch => {
-  return addGiveawaysAction(giveaways)
-}
-
 export const getGiveaways = storeQuery => async dispatch => {
   dispatch(setLoadingAction(true))
+
   try {
-    const data = await storeQuery
+    const data = await storeQuery.get()
+    dispatch(setLoadingAction(false))
+
+    data.forEach(doc => {
+      dispatch(addGiveawayAction(doc.data()))
+    })
   } catch (error) {
     dispatch(errorAction(error.message))
   }
