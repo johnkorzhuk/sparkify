@@ -58,10 +58,9 @@ const Giveaways = ({
       </StyledRow>
       <ItemContainer gutter={gutter}>
         {giveaways &&
-          giveaways.slice(0, itemsPerPage).map(giveaway => {
-            if (!giveaway.id) console.log(giveaway.title)
+          giveaways.slice(0, itemsPerPage).map((giveaway, index) => {
             return (
-              <StyledCol key={giveaway.id} span={6} gutter={gutter}>
+              <StyledCol key={giveaway.id || index} span={6} gutter={gutter}>
                 <GiveawayItem {...giveaway} />
               </StyledCol>
             )

@@ -16,7 +16,7 @@ class GiveawaySubmitPageContainer extends Component {
       if (!err) {
         const { image, ...values } = {
           ...fieldsValue,
-          endDate: fieldsValue.endDate.toDate(),
+          endDate: new Date(fieldsValue.endDate.toDate()),
           category: fieldsValue.category,
           image: fieldsValue.image[0],
         }

@@ -3,22 +3,37 @@ import shortId from "short-id"
 import FuseFuzzy from "fuse.js"
 
 import { selectFilterState } from "./filters/selectors"
+import { selectEnteredGiveaways } from "../user/selectors"
 
 export const selectAllGiveaways = state => state.giveaways.root.all
 export const selectFilterSortOrder = state =>
   state.giveaways.root.filterSortOrder
 
 export const selectFilteredSortedGifts = createSelector(
-  [selectAllGiveaways, selectFilterState, selectFilterSortOrder],
-  (allGiveaways, sortFilters, filterSortOrder) => {
+  [
+    selectAllGiveaways,
+    selectFilterState,
+    selectFilterSortOrder,
+    selectEnteredGiveaways,
+  ],
+  (allGiveaways, sortFilters, filterSortOrder, entered) => {
     // TODO handle hideViewed
-    const { sort, hideViewed, ...filters } = sortFilters
+    const { sort, ...filters } = sortFilters
 
     return filterSortOrder.reduce(
       (aggr, curr) => {
         if (curr === "filter") {
           return Object.keys(filters).reduce(
             (aggr, curr) => {
+              if (curr === "hideViewed") {
+                if (filters[curr]) {
+                  return aggr.filter(({ id }) => {
+                    return entered.id !== id
+                  })
+                } else {
+                  return aggr
+                }
+              }
               if (filters[curr]) {
                 if (curr === "searchInput") {
                   const options = {
