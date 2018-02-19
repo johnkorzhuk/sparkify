@@ -51,22 +51,3 @@ export const selectFilteredSortedGifts = createSelector(
     return filtered
   },
 )
-
-export const selectSetAmountOfGifts = limit =>
-  createSelector([selectFilteredSortedGifts], gifts => {
-    if (gifts.length < limit) {
-      const remainder = limit - gifts.length
-      let items = []
-
-      for (let i = 0; i < remainder; i++) {
-        items.push({
-          placeholder: true,
-          id: shortId.generate(),
-        })
-      }
-
-      return [...gifts, ...items]
-    } else {
-      return gifts
-    }
-  })

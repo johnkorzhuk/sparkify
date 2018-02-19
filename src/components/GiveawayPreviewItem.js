@@ -1,10 +1,10 @@
 import React from "react"
-import styled, { css } from "styled-components"
+import styled from "styled-components"
 import Countdown from "react-countdown-now"
 
 import { CATEGORY_RESOURCES, TYPE_RESOURCES } from "../config"
 
-const Card = styled(({ placeholder, ...props }) => <div {...props} />)`
+const Card = styled.div`
   width: 100%;
   height: 200px;
   ${({ gradient }) => gradient};
@@ -15,18 +15,13 @@ const Card = styled(({ placeholder, ...props }) => <div {...props} />)`
   box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.25);
   box-sizing: border-box;
   cursor: pointer;
-  filter: hue-rotate(0deg)
-    grayscale(${({ placeholder }) => (placeholder ? 1 : 0)});
+  filter: hue-rotate(0deg);
   transition: box-shadow 200ms linear, transform 200ms linear,
     filter 200ms linear;
 
   &:hover {
-    ${({ placeholder }) =>
-      !placeholder &&
-      css`
-        box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.35);
-        transform: translateY(-5px);
-      `};
+    box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.35);
+    transform: translateY(-5px);
   }
 `
 
@@ -87,31 +82,10 @@ const Value = styled.span`
   padding-bottom: 5px;
 `
 
-const Placeholder = styled.div`
-  height: 10px;
-  width: ${({ width }) => width}px;
-  background-color: rgba(0, 0, 0, 0.15);
-  border-radius: 2px;
-`
-
-const InlinePlaceholderContainer = styled.div`
-  display: flex;
-  width: 100px;
-`
-
 const Title = styled.h3`
   color: rgba(0, 0, 0, 0.55);
   font-size: 12px;
   margin: 0;
-`
-
-const PlaceHolderTitle = Placeholder.extend`
-  height: 8px;
-  margin-top: 10px;
-
-  &:first-child {
-    margin-right: 5px;
-  }
 `
 
 const countdownRenderer = ({ days, hours, minutes, seconds }) => {
@@ -125,63 +99,27 @@ const countdownRenderer = ({ days, hours, minutes, seconds }) => {
   return <span>{days}</span>
 }
 
-const GiveawayPrevItem = ({
-  title,
-  category,
-  value,
-  type,
-  endDate,
-  placeholder = false,
-  allLoaded,
-  loading,
-}) => {
-  let categoryRoot
-  let CategoryIcon
-  let TypeIcon
-  let gradient =
-    "background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%)"
-  if (!placeholder) {
-    categoryRoot = category.split("/")[0]
-    gradient = CATEGORY_RESOURCES[categoryRoot].gradient
-    CategoryIcon = CATEGORY_RESOURCES[categoryRoot].Icon
-    TypeIcon = TYPE_RESOURCES[type].Icon
-  }
-
-  const renderPlaceHolders =
-    (loading && !allLoaded && placeholder) || !placeholder
+const GiveawayPrevItem = ({ title, category, value, type, endDate }) => {
+  const CategoryIcon = CATEGORY_RESOURCES[category].Icon
+  const TypeIcon = TYPE_RESOURCES[type].Icon
+  const gradient = CATEGORY_RESOURCES[category].gradient
 
   return (
-    renderPlaceHolders && (
-      <Card gradient={gradient} placeholder={placeholder}>
-        {!placeholder && (
-          <CardIconContainer>
-            <CategoryIcon color="white" />
-            <CardCountdownContaner>
-              <Countdown date={endDate} renderer={countdownRenderer} />
-            </CardCountdownContaner>
-          </CardIconContainer>
-        )}
-        <CardContentContainer>
-          {placeholder ? (
-            <div>
-              <Placeholder width={20} />
-              <InlinePlaceholderContainer>
-                <PlaceHolderTitle width={60} />
-                <PlaceHolderTitle width={20} />
-              </InlinePlaceholderContainer>
-            </div>
-          ) : (
-            <div>
-              <Value>${value}</Value>
-              <Title>{title}</Title>
-            </div>
-          )}
-          {!placeholder && (
-            <TypeIcon color="rgba(0, 0, 0, 0.65)" className="type-icon" />
-          )}
-        </CardContentContainer>
-      </Card>
-    )
+    <Card gradient={gradient}>
+      <CardIconContainer>
+        <CategoryIcon color="white" />
+        <CardCountdownContaner>
+          <Countdown date={endDate} renderer={countdownRenderer} />
+        </CardCountdownContaner>
+      </CardIconContainer>
+      <CardContentContainer>
+        <div>
+          <Value>${value}</Value>
+          <Title>{title}</Title>
+        </div>
+        <TypeIcon color="rgba(0, 0, 0, 0.65)" className="type-icon" />
+      </CardContentContainer>
+    </Card>
   )
 }
 

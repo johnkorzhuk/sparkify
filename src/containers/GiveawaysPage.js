@@ -13,7 +13,7 @@ import {
   selectFilterFieldChangedState,
   selectFilterState,
 } from "../store/giveaways/filters/selectors"
-import { selectSetAmountOfGifts } from "../store/giveaways/selectors"
+import { selectFilteredSortedGifts } from "../store/giveaways/selectors"
 import { ALGOLIA } from "../config"
 
 import GiveawaysPage from "../components/pages/Giveaways"
@@ -56,10 +56,7 @@ class GiveawaysPageContainer extends Component {
       allLoaded: nextAllLoaded,
     } = nextProps
 
-    const limitDiff = nextGiveaways.reduce((aggr, curr) => {
-      if (curr.placeholder) return aggr + 1
-      return aggr
-    }, 0)
+    const limitDiff = GIVEAWAY_LIMIT - nextGiveaways.length
 
     if (limitDiff > 0 && !giveawaysLoading && !nextGiveawaysLoading) {
       const searchFiltersAreEqual = search === nextSearch
@@ -146,7 +143,7 @@ class GiveawaysPageContainer extends Component {
 export default connect(
   state => {
     return {
-      giveaways: selectSetAmountOfGifts(GIVEAWAY_LIMIT)(state),
+      giveaways: selectFilteredSortedGifts(state),
       filterFieldHasChanged: selectFilterFieldChangedState(state),
       search: state.giveaways.filters.searchInput,
       category: state.giveaways.filters.category,

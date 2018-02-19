@@ -56,15 +56,12 @@ const Giveaways = ({
         </FilterButton>
       </StyledRow>
       <ItemContainer gutter={gutter}>
-        {giveaways.map(giveaway => (
-          <StyledCol key={giveaway.id} span={6} gutter={gutter}>
-            <GiveawayItem
-              {...giveaway}
-              allLoaded={allLoaded}
-              loading={loading}
-            />
-          </StyledCol>
-        ))}
+        {giveaways &&
+          giveaways.map(giveaway => (
+            <StyledCol key={giveaway.id} span={6} gutter={gutter}>
+              <GiveawayItem {...giveaway} />
+            </StyledCol>
+          ))}
       </ItemContainer>
       <StyledRow>
         <Col span={4} offset="10">

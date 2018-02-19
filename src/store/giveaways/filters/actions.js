@@ -1,3 +1,5 @@
+import { setAllLoadedAction } from "../actions"
+
 // ACTIONS
 export const RESET_ALL = "giveaways/filters/RESET_ALL"
 export const RESET_FILTER = "giveaways/filters/RESET_FILTER"
@@ -35,5 +37,6 @@ export const resetFilter = filter => dispatch => {
 }
 
 export const setFilter = (filter, value, order) => (dispatch, getState) => {
+  dispatch(setAllLoadedAction(false))
   dispatch(setFilterAction(filter, value, order))
 }
