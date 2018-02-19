@@ -26,6 +26,8 @@ class GiveawaysPageContainer extends Component {
   lastDocument = null
   collection = firebase.store.collection("giveaways")
   index = algoliaSearch(appId, searchKey).initIndex("giveaways")
+  // for algolia pagination
+  page = 0
 
   componentWillMount() {
     this.index.searchCacheEnabled = true
@@ -60,8 +62,12 @@ class GiveawaysPageContainer extends Component {
       giveawaysLoading: nextGiveawaysLoading,
       allLoaded: nextAllLoaded,
     } = nextProps
-
     const limitDiff = GIVEAWAY_LIMIT - nextGiveaways.length
+
+    if (search !== nextSearch && nextSearch) {
+      // reset algolia pagination
+      this.page = 0
+    }
 
     if (limitDiff > 0 && !giveawaysLoading && !nextGiveawaysLoading) {
       const searchFiltersAreEqual = search === nextSearch
@@ -100,14 +106,16 @@ class GiveawaysPageContainer extends Component {
     }, this.collection)
   }
 
-  queryBySearchInput = debounce(input => {
+  queryBySearchInput = debounce(async input => {
     const { getGiveawaysFromAlgolia } = this.props
+
     const query = this.index.search({
       query: input,
       hitsPerPage: GIVEAWAY_LIMIT,
+      page: this.page,
     })
 
-    getGiveawaysFromAlgolia(query)
+    this.page = await getGiveawaysFromAlgolia(query)
   }, 750)
 
   handleLoadMore = async () => {
@@ -119,24 +127,32 @@ class GiveawaysPageContainer extends Component {
       category,
       type,
       itemsPerPage,
+      filterSortOrder,
+      search,
     } = this.props
 
-    if (giveaways.length <= itemsPerPage) {
-      let query = this.generateQuery({
-        sort,
-        category,
-        type,
-      })
+    if (filterSortOrder[filterSortOrder.length - 1] === "sort") {
+      if (giveaways.length <= itemsPerPage) {
+        let query = this.generateQuery({
+          sort,
+          category,
+          type,
+        })
 
-      if (this.lastDocument) {
-        query = query.startAfter(this.lastDocument)
+        if (this.lastDocument) {
+          query = query.startAfter(this.lastDocument)
+        }
+
+        this.lastDocument = await getGiveawaysFromStore(
+          query.limit(GIVEAWAY_LIMIT),
+        )
       }
-
-      this.lastDocument = await getGiveawaysFromStore(
-        query.limit(GIVEAWAY_LIMIT),
-      )
+    } else if (
+      filterSortOrder[filterSortOrder.length - 1] === "filter" &&
+      search
+    ) {
+      await this.queryBySearchInput(search)
     }
-
     addItemsToPage(GIVEAWAY_LIMIT)
   }
 
@@ -177,6 +193,7 @@ export default connect(
       giveawaysLoading: state.giveaways.root.loading,
       allLoaded: state.giveaways.root.allLoaded,
       itemsPerPage: state.giveaways.root.itemsPerPage,
+      filterSortOrder: state.giveaways.root.filterSortOrder,
     }
   },
   {

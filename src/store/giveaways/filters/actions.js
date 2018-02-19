@@ -30,13 +30,14 @@ export const setFilterAction = (filter, value, order) => ({
 // BOUND ACTION CREATORS
 export const resetAllFilters = () => dispatch => {
   dispatch(resetAllAction())
+  dispatch(setAllLoadedAction(false))
 }
 
 export const resetFilter = filter => dispatch => {
   dispatch(resetFilterAction(filter))
+  dispatch(setAllLoadedAction(false))
 }
 
 export const setFilter = (filter, value, order) => (dispatch, getState) => {
-  dispatch(setAllLoadedAction(false))
   dispatch(setFilterAction(filter, value, order))
 }

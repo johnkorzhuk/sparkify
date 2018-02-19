@@ -74,13 +74,19 @@ export const getGiveawaysFromAlgolia = query => async dispatch => {
   dispatch(setLoadingAction(true))
 
   try {
-    const { hits, ...rest } = await query
-
+    const { hits, page, nbPages, ...rest } = await query
+    console.log({ hits, page, nbPages, ...rest })
     dispatch(setLoadingAction(false))
 
     hits.forEach(gift => {
       dispatch(addGiveawayAction(gift))
     })
+
+    if (nbPages > 0 && page < nbPages) {
+      return page + 1
+    } else {
+      dispatch(setAllLoadedAction(true))
+    }
   } catch (error) {
     console.log(error)
   }
