@@ -15,6 +15,7 @@ const StyledRow = styled(Row)`
 
 const ItemContainer = StyledRow.extend`
   margin-top: 60px;
+  margin-bottom: 40px;
   padding: 0;
 `
 
@@ -23,34 +24,62 @@ const StyledCol = styled(Col)`
   list-style: none;
 `
 
-const StyledButton = styled(Button)`
+const FilterButton = styled(Button)`
   margin-top: 10px;
 `
 
-const Giveaways = ({ giveaways, resetAllFilters, hasChanged }) => {
+const LoadButton = styled(Button)`
+  width: 100%;
+`
+
+const Giveaways = ({
+  giveaways,
+  resetAllFilters,
+  hasChanged,
+  allLoaded,
+  loading,
+  loadMore,
+}) => {
   const gutter = 32
 
   return (
     <Container>
       <StyledRow>
         <GiveawayFilters />
-        <StyledButton
+        <FilterButton
           type="dashed"
           size="small"
           onClick={resetAllFilters}
           disabled={!hasChanged}
         >
           Reset All
-        </StyledButton>
+        </FilterButton>
       </StyledRow>
       <ItemContainer gutter={gutter}>
-        {giveaways &&
-          giveaways.map(giveaway => (
-            <StyledCol key={giveaway.id} span={6} gutter={gutter}>
-              <GiveawayItem {...giveaway} />
-            </StyledCol>
-          ))}
+        {giveaways.map(giveaway => (
+          <StyledCol key={giveaway.id} span={6} gutter={gutter}>
+            <GiveawayItem
+              {...giveaway}
+              allLoaded={allLoaded}
+              loading={loading}
+            />
+          </StyledCol>
+        ))}
       </ItemContainer>
+      <StyledRow>
+        <Col span={4} offset="10">
+          {!allLoaded && (
+            <LoadButton
+              size="large"
+              type="dashed"
+              loading={loading}
+              onClick={loadMore}
+            >
+              Load more
+            </LoadButton>
+          )}
+        </Col>
+      </StyledRow>
     </Container>
   )
 }

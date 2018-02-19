@@ -2,7 +2,7 @@ import React from "react"
 import styled from "styled-components"
 import { Input, Checkbox, Cascader, Select, Button, Icon, Form } from "antd"
 
-import { CATEGORIES, TYPES } from "../../config"
+import { CATEGORY_RESOURCES, TYPE_RESOURCES } from "../../config"
 
 const { Option } = Select
 const FormItem = Form.Item
@@ -59,7 +59,7 @@ const CloseCircle = styled(({ hasInput, ...props }) => <Icon {...props} />)`
 
 const GiveawayFilters = ({
   search,
-  categories,
+  category,
   sort,
   type,
   hideViewed,
@@ -84,18 +84,22 @@ const GiveawayFilters = ({
           value={search}
         />
       </SearchFormItem>
-      <CascaderFormItem>
-        <StyledCascader
-          options={CATEGORIES}
-          placeholder="Categories"
-          changeOnSelect
-          type="categories"
-          value={categories}
+      <SelectFormItem>
+        <Select
+          value={category}
           onChange={value => {
-            setFilter("categories", value)
+            setFilter("category", value)
           }}
-        />
-      </CascaderFormItem>
+          placeholder="Categories"
+          allowClear
+        >
+          {Object.keys(CATEGORY_RESOURCES).map(category => (
+            <Option key={category} value={category}>
+              {CATEGORY_RESOURCES[category].label}
+            </Option>
+          ))}
+        </Select>
+      </SelectFormItem>
       <SelectFormItem>
         <Select
           value={type}
@@ -105,9 +109,9 @@ const GiveawayFilters = ({
           placeholder="Type"
           allowClear
         >
-          {TYPES.map(type => (
+          {Object.keys(TYPE_RESOURCES).map(type => (
             <Option key={type} value={type}>
-              {type}
+              {TYPE_RESOURCES[type].label}
             </Option>
           ))}
         </Select>
@@ -117,14 +121,12 @@ const GiveawayFilters = ({
           value={sort.value}
           onSelect={value => {
             const order =
-              value === sort.value && sort.order !== "descending"
-                ? "descending"
-                : "acsending"
+              value === sort.value && sort.order !== "desc" ? "desc" : "asc"
             setFilter("sort", value, order)
           }}
         >
           <Option value="value">Value</Option>
-          <Option value="newest">Newest</Option>
+          <Option value="createdOn">Newest</Option>
           <Option value="endDate">End Date</Option>
         </Select>
       </SelectFormItem>

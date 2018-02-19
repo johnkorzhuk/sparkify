@@ -3,6 +3,9 @@ export const ADD = "giveaways/ADD_GIVEAWAY"
 export const SET_ALL_LOADED = "giveaways/SET_ALL_LOADED"
 export const SET_LOADING = "giveaways/SET_LOADING"
 export const ERROR = "giveaways/ERROR"
+export const PUSH_QUERY_ORDER = "giveaways/PUSH_QUERY_ORDER"
+export const REMOVE_QUERY_ORDER = "giveaways/REMOVE_QUERY_ORDER"
+export const RESET_QUERY_ORDER = "giveaways/RESET_QUERY_ORDER"
 
 // ACTION CREATORS
 export const addGiveawayAction = giveaway => ({
@@ -20,7 +23,7 @@ export const setAllLoadedAction = allLoaded => ({
 })
 
 export const setLoadingAction = loading => ({
-  type: SET_ALL_LOADED,
+  type: SET_LOADING,
   payload: {
     loading,
   },
@@ -33,18 +36,58 @@ export const errorAction = message => ({
   },
 })
 
+export const pushQueryOrderAction = filter => ({
+  type: PUSH_QUERY_ORDER,
+  payload: {
+    filter,
+  },
+})
+
+export const removeQueryOrderAction = filter => ({
+  type: REMOVE_QUERY_ORDER,
+  payload: {
+    filter,
+  },
+})
+
+export const resetQueryOrderAction = () => ({
+  type: RESET_QUERY_ORDER,
+  payload: null,
+})
+
 // BOUND ACTION CREATORS
-export const getGiveaways = storeQuery => async dispatch => {
+export const getGiveawaysFromStore = storeQuery => async dispatch => {
   dispatch(setLoadingAction(true))
 
   try {
-    const data = await storeQuery.get()
+    const snapshot = await storeQuery.get()
     dispatch(setLoadingAction(false))
 
-    data.forEach(doc => {
+    snapshot.forEach((doc, index) => {
       dispatch(addGiveawayAction(doc.data()))
     })
+
+    dispatch(setAllLoadedAction(snapshot.empty))
+
+    return snapshot.docs[snapshot.docs.length - 1]
   } catch (error) {
-    dispatch(errorAction(error.message))
+    console.log(error.message)
+    // dispatch(errorAction(error.message))
+  }
+}
+
+export const getGiveawaysFromAlgolia = query => async dispatch => {
+  dispatch(setLoadingAction(true))
+
+  try {
+    const { hits } = await query
+    console.log(hits.length)
+    dispatch(setLoadingAction(false))
+
+    hits.forEach(gift => {
+      dispatch(addGiveawayAction(gift))
+    })
+  } catch (error) {
+    console.log(error)
   }
 }

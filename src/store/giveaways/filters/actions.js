@@ -34,6 +34,6 @@ export const resetFilter = filter => dispatch => {
   dispatch(resetFilterAction(filter))
 }
 
-export const setFilter = (...args) => dispatch => {
-  dispatch(setFilterAction(...args))
+export const setFilter = (filter, value, order) => (dispatch, getState) => {
+  dispatch(setFilterAction(filter, value, order))
 }

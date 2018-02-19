@@ -10,7 +10,7 @@ export default connect(
   state => {
     return {
       search: state.giveaways.filters.searchInput,
-      categories: state.giveaways.filters.categories,
+      category: state.giveaways.filters.category,
       sort: state.giveaways.filters.sort,
       type: state.giveaways.filters.type,
       hideViewed: state.giveaways.filters.hideViewed,

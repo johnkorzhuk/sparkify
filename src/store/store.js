@@ -8,7 +8,8 @@ import rootReducer from "./reducers"
 let middleware = [thunkMiddleware]
 
 if (process.env.NODE_ENV !== "production") {
-  middleware = [...middleware, logger]
+  middleware = [...middleware]
+  // middleware = [...middleware, logger]
 }
 
 export default createStore(

@@ -13,7 +13,7 @@ import {
   Icon,
 } from "antd"
 
-import { LOCATIONS, CATEGORIES, TYPES } from "../../config"
+import { LOCATIONS, TYPE_RESOURCES, CATEGORY_RESOURCES } from "../../config"
 
 const FormItem = Form.Item
 const { MonthPicker } = DatePicker
@@ -89,19 +89,27 @@ const GiveawaySubmissionForm = ({
           rules: [{ required: true, message: "Required" }],
         })(
           <RadioGroup>
-            {TYPES.map(type => (
+            {Object.keys(TYPE_RESOURCES).map(type => (
               <RadioButton value={type} key={type}>
-                {type}
+                {TYPE_RESOURCES[type].label}
               </RadioButton>
             ))}
           </RadioGroup>,
         )}
       </FormItem>
 
-      <FormItem label="Category" hasFeedback>
+      <FormItem label="Category">
         {getFieldDecorator("category", {
-          rules: [{ type: "array", required: true, message: "required" }],
-        })(<Cascader options={CATEGORIES} />)}
+          rules: [{ required: true, message: "Required" }],
+        })(
+          <RadioGroup>
+            {Object.keys(CATEGORY_RESOURCES).map(category => (
+              <RadioButton value={category} key={category}>
+                {CATEGORY_RESOURCES[category].label}
+              </RadioButton>
+            ))}
+          </RadioGroup>,
+        )}
       </FormItem>
 
       <FormItem label="End date / time">

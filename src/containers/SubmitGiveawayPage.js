@@ -16,8 +16,8 @@ class GiveawaySubmitPageContainer extends Component {
       if (!err) {
         const { image, ...values } = {
           ...fieldsValue,
-          "end-date": fieldsValue["end-date"].toDate(),
-          category: fieldsValue.category.join("/"),
+          endDate: fieldsValue.endDate.toDate(),
+          category: fieldsValue.category,
           image: fieldsValue.image[0],
         }
         const id = shortId.generate()
@@ -42,7 +42,7 @@ class GiveawaySubmitPageContainer extends Component {
           firebase.store
             .collection("users")
             .doc(user.uid)
-            .collection("giveaways")
+            .collection("createdGiveaways")
             .doc(id)
             .set({ id }),
         ])

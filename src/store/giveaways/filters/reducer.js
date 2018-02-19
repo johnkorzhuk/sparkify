@@ -2,11 +2,11 @@ import { RESET_ALL, RESET_FILTER, SET_FILTER } from "./actions"
 
 export const INITIAL_STATE = {
   searchInput: "",
-  categories: [],
+  category: undefined,
   sort: {
     value: "endDate",
-    // "acsending" or "descending"
-    order: "acsending",
+    // "asc" or "desc"
+    order: "asc",
   },
   type: undefined,
   hideViewed: false,

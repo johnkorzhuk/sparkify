@@ -17,11 +17,12 @@ import GiveawaysPage from "./containers/GiveawaysPage"
 // import { generateGiveaways } from "./store/giveaways/utils"
 
 class App extends Component {
-  componentDidMount() {
+  async componentDidMount() {
     const { startListeningToAuthChanges } = this.props
     this.authListener = startListeningToAuthChanges(firebase.auth)
 
-    // const generated = generateGiveaways(200)
+    // const { generated, created } = generateGiveaways(50)
+
     // await Promise.all([
     //   ...generated.map(data =>
     //     firebase.store
@@ -29,16 +30,33 @@ class App extends Component {
     //       .doc(data.id)
     //       .set(data),
     //   ),
-    //   ...generated.map(data =>
-    //     firebase.store
+    //   ...created.map(id => {
+    //     return firebase.store
     //       .collection("users")
     //       .doc("oNFMES0YaOfyfAsEjY4AImsTwl22")
-    //       .collection("giveaways")
-    //       .doc(data.id)
+    //       .collection("createdGiveaways")
+    //       .doc(id)
     //       .set({
-    //         id: data.id,
-    //       }),
-    //   ),
+    //         id,
+    //       })
+    //   }),
+    //   ...generated
+    //     .map(data => {
+    //       if (Math.random() >= 0.7) {
+    //         return firebase.store
+    //           .collection("users")
+    //           .doc("oNFMES0YaOfyfAsEjY4AImsTwl22")
+    //           .collection("enteredGiveaways")
+    //           .doc(data.id)
+    //           .set({
+    //             id: data.id,
+    //             date: new Date(),
+    //           })
+    //       } else {
+    //         return null
+    //       }
+    //     })
+    //     .filter(Boolean),
     // ])
   }
 

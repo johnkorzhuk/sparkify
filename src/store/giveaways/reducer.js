@@ -18,7 +18,11 @@ export const rootReducer = (state = INITIAL_STATE, action) => {
     case ADD:
       return {
         ...state,
-        all: [...state.all, action.payload.giveaway],
+        all: [
+          ...state.all.filter(({ id }) => id !== action.payload.giveaway.id),
+          // ...state.all,
+          action.payload.giveaway,
+        ],
       }
 
     case SET_ALL_LOADED:
