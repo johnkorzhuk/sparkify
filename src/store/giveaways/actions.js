@@ -75,7 +75,7 @@ export const getGiveawaysFromAlgolia = query => async dispatch => {
 
   try {
     const { hits, page, nbPages, ...rest } = await query
-    console.log({ hits, page, nbPages, ...rest })
+
     dispatch(setLoadingAction(false))
 
     hits.forEach(gift => {

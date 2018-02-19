@@ -38,6 +38,7 @@ class GiveawaySubmitPageContainer extends Component {
               approved: false,
               createdBy: user.uid,
               images: [storageData.downloadURL],
+              id,
             }),
           firebase.store
             .collection("users")

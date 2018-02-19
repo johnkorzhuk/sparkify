@@ -132,7 +132,7 @@ class GiveawaysPageContainer extends Component {
     } = this.props
 
     if (filterSortOrder[filterSortOrder.length - 1] === "sort") {
-      if (giveaways.length <= itemsPerPage) {
+      if (giveaways.length <= itemsPerPage + 4) {
         let query = this.generateQuery({
           sort,
           category,

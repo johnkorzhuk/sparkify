@@ -58,11 +58,14 @@ const Giveaways = ({
       </StyledRow>
       <ItemContainer gutter={gutter}>
         {giveaways &&
-          giveaways.slice(0, itemsPerPage).map(giveaway => (
-            <StyledCol key={giveaway.id} span={6} gutter={gutter}>
-              <GiveawayItem {...giveaway} />
-            </StyledCol>
-          ))}
+          giveaways.slice(0, itemsPerPage).map(giveaway => {
+            if (!giveaway.id) console.log(giveaway.title)
+            return (
+              <StyledCol key={giveaway.id} span={6} gutter={gutter}>
+                <GiveawayItem {...giveaway} />
+              </StyledCol>
+            )
+          })}
       </ItemContainer>
       <StyledRow>
         <Col span={4} offset="10">
