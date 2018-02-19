@@ -65,6 +65,7 @@ const GiveawayFilters = ({
   hideViewed,
   setFilter,
   resetFilter,
+  updateFilterSortOrder,
 }) => {
   return (
     <StyledForm layout="inline">
@@ -73,12 +74,16 @@ const GiveawayFilters = ({
           suffix={
             <CloseCircle
               type="close-circle"
-              onClick={() => !!search && resetFilter("searchInput")}
+              onClick={() => {
+                resetFilter("searchInput")
+                updateFilterSortOrder(["filter", "sort"])
+              }}
               hasInput={!!search}
             />
           }
           placeholder="Filter"
           onChange={e => {
+            updateFilterSortOrder(["sort", "filter"])
             setFilter("searchInput", e.target.value)
           }}
           value={search}
@@ -123,6 +128,7 @@ const GiveawayFilters = ({
             const order =
               value === sort.value && sort.order !== "desc" ? "desc" : "asc"
             setFilter("sort", value, order)
+            updateFilterSortOrder(["filter", "sort"])
           }}
         >
           <Option value="value">Value</Option>

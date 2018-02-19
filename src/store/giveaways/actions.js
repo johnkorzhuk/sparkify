@@ -3,9 +3,8 @@ export const ADD = "giveaways/ADD_GIVEAWAY"
 export const SET_ALL_LOADED = "giveaways/SET_ALL_LOADED"
 export const SET_LOADING = "giveaways/SET_LOADING"
 export const ERROR = "giveaways/ERROR"
-export const PUSH_QUERY_ORDER = "giveaways/PUSH_QUERY_ORDER"
-export const REMOVE_QUERY_ORDER = "giveaways/REMOVE_QUERY_ORDER"
-export const RESET_QUERY_ORDER = "giveaways/RESET_QUERY_ORDER"
+export const UPDATE_FILTER_SORT_ORDER = "giveaways/UPDATE_FILTER_SORT_ORDER,"
+export const ADD_ITEMS_TO_PAGE = "giveaways/ADD_ITEMS_TO_PAGE"
 
 // ACTION CREATORS
 export const addGiveawayAction = giveaway => ({
@@ -36,23 +35,18 @@ export const errorAction = message => ({
   },
 })
 
-export const pushQueryOrderAction = filter => ({
-  type: PUSH_QUERY_ORDER,
+export const updateFilterSortOrderAction = order => ({
+  type: UPDATE_FILTER_SORT_ORDER,
   payload: {
-    filter,
+    order,
   },
 })
 
-export const removeQueryOrderAction = filter => ({
-  type: REMOVE_QUERY_ORDER,
+export const addItemsToPageAction = amount => ({
+  type: ADD_ITEMS_TO_PAGE,
   payload: {
-    filter,
+    amount,
   },
-})
-
-export const resetQueryOrderAction = () => ({
-  type: RESET_QUERY_ORDER,
-  payload: null,
 })
 
 // BOUND ACTION CREATORS
@@ -80,8 +74,8 @@ export const getGiveawaysFromAlgolia = query => async dispatch => {
   dispatch(setLoadingAction(true))
 
   try {
-    const { hits } = await query
-    console.log(hits.length)
+    const { hits, ...rest } = await query
+
     dispatch(setLoadingAction(false))
 
     hits.forEach(gift => {
@@ -90,4 +84,12 @@ export const getGiveawaysFromAlgolia = query => async dispatch => {
   } catch (error) {
     console.log(error)
   }
+}
+
+export const addItemsToPage = amount => dispatch => {
+  dispatch(addItemsToPageAction(amount))
+}
+
+export const updateFilterSortOrder = order => dispatch => {
+  dispatch(updateFilterSortOrderAction(order))
 }

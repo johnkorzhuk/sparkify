@@ -1,12 +1,23 @@
 import { combineReducers } from "redux"
 
-import { ADD, SET_ALL_LOADED, SET_LOADING, ERROR } from "./actions"
+import {
+  ADD,
+  SET_ALL_LOADED,
+  SET_LOADING,
+  ERROR,
+  ADD_ITEMS_TO_PAGE,
+  UPDATE_FILTER_SORT_ORDER,
+} from "./actions"
 import filters from "./filters/reducer"
+
+export const GIVEAWAY_LIMIT = 12
 
 export const INITIAL_STATE = {
   all: [],
   allLoaded: false,
   loading: false,
+  itemsPerPage: GIVEAWAY_LIMIT,
+  filterSortOrder: ["filter", "sort"],
   error: {
     hasError: false,
     message: "",
@@ -20,7 +31,6 @@ export const rootReducer = (state = INITIAL_STATE, action) => {
         ...state,
         all: [
           ...state.all.filter(({ id }) => id !== action.payload.giveaway.id),
-          // ...state.all,
           action.payload.giveaway,
         ],
       }
@@ -46,6 +56,18 @@ export const rootReducer = (state = INITIAL_STATE, action) => {
           hasError: true,
           message: action.payload.message,
         },
+      }
+
+    case ADD_ITEMS_TO_PAGE:
+      return {
+        ...state,
+        itemsPerPage: state.itemsPerPage + action.payload.amount,
+      }
+
+    case UPDATE_FILTER_SORT_ORDER:
+      return {
+        ...state,
+        filterSortOrder: action.payload.order,
       }
 
     default:

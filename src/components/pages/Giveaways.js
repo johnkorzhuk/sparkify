@@ -39,6 +39,7 @@ const Giveaways = ({
   allLoaded,
   loading,
   loadMore,
+  itemsPerPage,
 }) => {
   const gutter = 32
 
@@ -57,7 +58,7 @@ const Giveaways = ({
       </StyledRow>
       <ItemContainer gutter={gutter}>
         {giveaways &&
-          giveaways.map(giveaway => (
+          giveaways.slice(0, itemsPerPage).map(giveaway => (
             <StyledCol key={giveaway.id} span={6} gutter={gutter}>
               <GiveawayItem {...giveaway} />
             </StyledCol>

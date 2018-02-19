@@ -3,6 +3,7 @@ import { connect } from "react-redux"
 
 import firebase from "../services/firebase"
 import { setFilter, resetFilter } from "../store/giveaways/filters/actions"
+import { updateFilterSortOrder } from "../store/giveaways/actions"
 
 import Filters from "../components/forms/GiveawaysFilters"
 
@@ -16,5 +17,5 @@ export default connect(
       hideViewed: state.giveaways.filters.hideViewed,
     }
   },
-  { setFilter, resetFilter },
+  { setFilter, resetFilter, updateFilterSortOrder },
 )(Filters)

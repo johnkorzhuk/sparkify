@@ -7,6 +7,7 @@ import firebase from "../services/firebase"
 import {
   getGiveawaysFromStore,
   getGiveawaysFromAlgolia,
+  addItemsToPage,
 } from "../store/giveaways/actions"
 import { resetAllFilters } from "../store/giveaways/filters/actions"
 import {
@@ -15,16 +16,20 @@ import {
 } from "../store/giveaways/filters/selectors"
 import { selectFilteredSortedGifts } from "../store/giveaways/selectors"
 import { ALGOLIA } from "../config"
+import { GIVEAWAY_LIMIT } from "../store/giveaways/reducer"
 
 import GiveawaysPage from "../components/pages/Giveaways"
 
-const GIVEAWAY_LIMIT = 12
 const { appId, searchKey } = ALGOLIA
 
 class GiveawaysPageContainer extends Component {
   lastDocument = null
   collection = firebase.store.collection("giveaways")
   index = algoliaSearch(appId, searchKey).initIndex("giveaways")
+
+  componentWillMount() {
+    this.index.searchCacheEnabled = true
+  }
 
   async componentDidMount() {
     const { getGiveawaysFromStore, sort, category, type } = this.props
@@ -99,23 +104,40 @@ class GiveawaysPageContainer extends Component {
     const { getGiveawaysFromAlgolia } = this.props
     const query = this.index.search({
       query: input,
+      hitsPerPage: GIVEAWAY_LIMIT,
     })
+
     getGiveawaysFromAlgolia(query)
   }, 750)
 
   handleLoadMore = async () => {
-    const { getGiveawaysFromStore, sort, category, type } = this.props
-    let query = this.generateQuery({
+    const {
+      getGiveawaysFromStore,
+      giveaways,
+      addItemsToPage,
       sort,
       category,
       type,
-    })
+      itemsPerPage,
+    } = this.props
 
-    if (this.lastDocument) {
-      query = query.startAfter(this.lastDocument)
+    if (giveaways.length <= itemsPerPage) {
+      let query = this.generateQuery({
+        sort,
+        category,
+        type,
+      })
+
+      if (this.lastDocument) {
+        query = query.startAfter(this.lastDocument)
+      }
+
+      this.lastDocument = await getGiveawaysFromStore(
+        query.limit(GIVEAWAY_LIMIT),
+      )
     }
 
-    this.lastDocument = await getGiveawaysFromStore(query.limit(GIVEAWAY_LIMIT))
+    addItemsToPage(GIVEAWAY_LIMIT)
   }
 
   render() {
@@ -125,6 +147,7 @@ class GiveawaysPageContainer extends Component {
       filterFieldHasChanged,
       giveawaysLoading,
       allLoaded,
+      itemsPerPage,
     } = this.props
 
     return (
@@ -135,6 +158,7 @@ class GiveawaysPageContainer extends Component {
         hasChanged={filterFieldHasChanged}
         allLoaded={allLoaded}
         loadMore={this.handleLoadMore}
+        itemsPerPage={itemsPerPage}
       />
     )
   }
@@ -152,7 +176,13 @@ export default connect(
       hideViewed: state.giveaways.filters.hideViewed,
       giveawaysLoading: state.giveaways.root.loading,
       allLoaded: state.giveaways.root.allLoaded,
+      itemsPerPage: state.giveaways.root.itemsPerPage,
     }
   },
-  { getGiveawaysFromStore, getGiveawaysFromAlgolia, resetAllFilters },
+  {
+    getGiveawaysFromStore,
+    getGiveawaysFromAlgolia,
+    resetAllFilters,
+    addItemsToPage,
+  },
 )(GiveawaysPageContainer)
