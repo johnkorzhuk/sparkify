@@ -1,25 +1,25 @@
-import React, { Component } from "react"
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
-import { connect } from "react-redux"
+import React, { Component } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-import firebase from "./services/firebase"
-import { startListeningToAuthChanges } from "./store/auth/actions"
-import { selectAuthenticatedState } from "./store/auth/selectors"
+import firebase from './services/firebase';
+import { startListeningToAuthChanges } from './store/auth/actions';
+import { selectAuthenticatedState } from './store/auth/selectors';
 
-import Header from "./components/Header"
-import Footer from "./components/Footer"
-import HomePage from "./components/pages/Home"
-import FAQPage from "./components/pages/FAQ"
-import LoginPage from "./containers/LoginPage"
-import SubmitGiveawayPage from "./containers/SubmitGiveawayPage"
-import GiveawaysPage from "./containers/GiveawaysPage"
+import Header from './components/Header';
+import Footer from './components/Footer';
+import HomePage from './components/pages/Home';
+import FAQPage from './components/pages/FAQ';
+import LoginPage from './containers/LoginPage';
+import SubmitGiveawayPage from './containers/SubmitGiveawayPage';
+import GiveawaysPage from './containers/GiveawaysPage';
 
 // import { generateGiveaways } from "./store/giveaways/utils"
 
 class App extends Component {
   async componentDidMount() {
-    const { startListeningToAuthChanges } = this.props
-    this.authListener = startListeningToAuthChanges(firebase.auth)
+    const { startListeningToAuthChanges } = this.props;
+    this.authListener = startListeningToAuthChanges(firebase.auth);
 
     // const { generated, created } = generateGiveaways(50)
 
@@ -61,7 +61,7 @@ class App extends Component {
   }
 
   render() {
-    const { authenticated } = this.props
+    const { authenticated } = this.props;
     return (
       <Router>
         <div className="App">
@@ -77,15 +77,15 @@ class App extends Component {
           <Footer />
         </div>
       </Router>
-    )
+    );
   }
 }
 
 export default connect(
   state => {
     return {
-      authenticated: selectAuthenticatedState(state),
-    }
+      authenticated: selectAuthenticatedState(state)
+    };
   },
-  { startListeningToAuthChanges },
-)(App)
+  { startListeningToAuthChanges }
+)(App);
