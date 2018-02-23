@@ -86,6 +86,18 @@ class Firebase {
         break
     }
   }
+
+  get usersCollection() {
+    return this.store.collection("users")
+  }
+
+  get giveawaysCollection() {
+    return this.store.collection("giveaways")
+  }
+
+  get expiredGiveawaysCollection() {
+    return this.store.collection("expiredGiveaways")
+  }
 }
 
 export default new Firebase(

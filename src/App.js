@@ -19,7 +19,7 @@ import GiveawaysPage from "./containers/GiveawaysPage"
 class App extends Component {
   async componentDidMount() {
     const { startListeningToAuthChanges } = this.props
-    this.authListener = startListeningToAuthChanges(firebase.auth)
+    this.authListener = startListeningToAuthChanges(firebase)
 
     // const { generated, created } = generateGiveaways(50)
 

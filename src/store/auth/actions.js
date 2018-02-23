@@ -1,3 +1,4 @@
+import { getEnteredGiveaways, getCreatedGiveaways } from "../user/actions"
 // ACTIONS
 export const LOGIN = "auth/LOGIN"
 export const LOGOUT = "auth/LOGOUT"
@@ -115,10 +116,13 @@ export const logout = auth => async dispatch => {
   }
 }
 
-export const startListeningToAuthChanges = auth => dispatch => {
-  return auth.onAuthStateChanged(async user => {
+export const startListeningToAuthChanges = firebase => (dispatch, getState) => {
+  return firebase.auth.onAuthStateChanged(async user => {
     if (user) {
       dispatch(loginAction(user))
+
+      getEnteredGiveaways(firebase, user.uid)(dispatch, getState)
+      getCreatedGiveaways(firebase, user.uid)(dispatch, getState)
     } else {
       dispatch(logoutAction())
     }

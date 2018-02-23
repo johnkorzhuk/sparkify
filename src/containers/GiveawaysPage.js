@@ -10,7 +10,7 @@ import {
   addItemsToPage,
 } from "../store/giveaways/actions"
 import { resetAllFilters } from "../store/giveaways/filters/actions"
-import { getEnteredGiveaways } from "../store/user/actions"
+import { getEnteredGiveaways, getCreatedGiveaways } from "../store/user/actions"
 import {
   selectFilterFieldChangedState,
   selectFilterState,
@@ -21,14 +21,22 @@ import { GIVEAWAY_LIMIT } from "../store/giveaways/reducer"
 import GiveawaysPage from "../components/pages/Giveaways"
 
 class GiveawaysPageContainer extends Component {
+  // firebase pagination
   lastDocument = null
-  giveawaysCollection = firebase.store.collection("giveaways")
-  usersCollection = firebase.store.collection("users")
-  // for algolia pagination
+  // algolia pagination
   page = 0
 
   async componentDidMount() {
-    const { getGiveawaysFromStore, sort, category, type } = this.props
+    const {
+      getGiveawaysFromStore,
+      sort,
+      uid,
+      category,
+      type,
+      getEnteredGiveaways,
+      getCreatedGiveaways,
+    } = this.props
+
     const giveawaysQuery = this.generateGiveawaysQuery({
       sort,
       category,
@@ -45,9 +53,7 @@ class GiveawaysPageContainer extends Component {
       type,
       giveawaysLoading,
       getGiveawaysFromStore,
-      getEnteredGiveaways,
       search,
-      uid,
     } = this.props
     const {
       category: nextCategory,
@@ -57,17 +63,8 @@ class GiveawaysPageContainer extends Component {
       giveaways: nextGiveaways,
       giveawaysLoading: nextGiveawaysLoading,
       allLoaded: nextAllLoaded,
-      uid: nextUid,
     } = nextProps
     const limitDiff = GIVEAWAY_LIMIT - nextGiveaways.length
-
-    if (uid !== nextUid && nextUid) {
-      const userQuery = this.usersCollection
-        .doc(nextUid)
-        .collection("enteredGiveaways")
-
-      getEnteredGiveaways(userQuery)
-    }
 
     if (search !== nextSearch && nextSearch) {
       // reset algolia pagination
@@ -108,7 +105,7 @@ class GiveawaysPageContainer extends Component {
         return aggr.where(curr, "==", queryFilters[curr])
       }
       return aggr
-    }, this.giveawaysCollection)
+    }, firebase.giveawaysCollection)
   }
 
   queryBySearchInput = debounce(async input => {
@@ -116,7 +113,7 @@ class GiveawaysPageContainer extends Component {
 
     const query = algolia.giveaways.search({
       query: input,
-      hitsPerPage: GIVEAWAY_LIMIT,
+      hitsPerPage: 30,
       page: this.page,
     })
 
@@ -135,7 +132,7 @@ class GiveawaysPageContainer extends Component {
       filterSortOrder,
       search,
     } = this.props
-    console.log(this.lastDocument)
+
     if (filterSortOrder[filterSortOrder.length - 1] === "sort") {
       if (giveaways.length <= itemsPerPage + 4) {
         let query = this.generateGiveawaysQuery({
@@ -208,5 +205,6 @@ export default connect(
     resetAllFilters,
     addItemsToPage,
     getEnteredGiveaways,
+    getCreatedGiveaways,
   },
 )(GiveawaysPageContainer)

@@ -45,8 +45,4 @@ export const resetFilter = filter => dispatch => {
 
 export const setFilter = (filter, value, order) => (dispatch, getState) => {
   dispatch(setFilterAction(filter, value, order))
-
-  if (filter !== "searchInput") {
-    // dispatch(updateFilterSortOrderAction(["filter", "sort"]))
-  }
 }

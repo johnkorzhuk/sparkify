@@ -1,8 +1,14 @@
-import { SET_LOADING, ADD_ENTERED, REMOVE_ENTERED } from "./actions"
+import {
+  SET_LOADING,
+  ADD_ENTERED_GIVEAWAYS,
+  REMOVE_ENTERED_GIVEAWAYS,
+  ADD_CREATED_GIVEAWAYS,
+  REMOVE_CREATED_GIVEAWAYS,
+} from "./actions"
 
 export const INITIA_STATE = {
-  enteredGiveaways: [],
-  createdGiveaways: [],
+  enteredGiveaways: {},
+  createdGiveaways: {},
   loading: false,
 }
 
@@ -14,18 +20,46 @@ export default (state = INITIA_STATE, action) => {
         loading: action.payload.loading,
       }
 
-    case ADD_ENTERED:
+    case ADD_ENTERED_GIVEAWAYS:
       return {
         ...state,
-        enteredGiveaways: [...state.enteredGiveaways, action.payload.giveaway],
+        enteredGiveaways: {
+          ...state.enteredGiveaways,
+          ...action.payload.giveaways,
+        },
       }
 
-    case REMOVE_ENTERED:
+    case REMOVE_ENTERED_GIVEAWAYS:
+      const {
+        [action.payload.giveawayId]: removedEntered,
+        ...filteredEntered
+      } = state.enteredGiveaways
       return {
         ...state,
-        enteredGiveaways: state.enteredGiveaways.filter(
-          ({ id }) => id !== action.payload.giveawayId,
-        ),
+        enteredGiveaways: {
+          ...filteredEntered,
+        },
+      }
+
+    case ADD_CREATED_GIVEAWAYS:
+      return {
+        ...state,
+        createdGiveaways: {
+          ...state.createdGiveaways,
+          ...action.payload.giveaways,
+        },
+      }
+
+    case REMOVE_CREATED_GIVEAWAYS:
+      const {
+        [action.payload.giveawayId]: removedCreated,
+        ...filteredCreated
+      } = state.enteredGiveaways
+      return {
+        ...state,
+        createdGiveaways: {
+          ...filteredCreated,
+        },
       }
 
     default:

@@ -109,7 +109,11 @@ const GiveawayPrevItem = ({ title, category, value, type, endDate }) => {
       <CardIconContainer>
         <CategoryIcon color="white" />
         <CardCountdownContaner>
-          <Countdown date={endDate} renderer={countdownRenderer} />
+          <Countdown
+            date={endDate}
+            renderer={countdownRenderer}
+            onComplete={(...args) => console.log("done", args)}
+          />
         </CardCountdownContaner>
       </CardIconContainer>
       <CardContentContainer>

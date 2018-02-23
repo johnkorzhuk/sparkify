@@ -32,6 +32,8 @@ const LoadButton = styled(Button)`
   width: 100%;
 `
 
+const GUTTER_SIZE = 32
+
 const Giveaways = ({
   giveaways,
   resetAllFilters,
@@ -41,8 +43,6 @@ const Giveaways = ({
   loadMore,
   itemsPerPage,
 }) => {
-  const gutter = 32
-
   return (
     <Container>
       <StyledRow>
@@ -56,11 +56,15 @@ const Giveaways = ({
           Reset All
         </FilterButton>
       </StyledRow>
-      <ItemContainer gutter={gutter}>
+      <ItemContainer gutter={GUTTER_SIZE}>
         {giveaways &&
           giveaways.slice(0, itemsPerPage).map((giveaway, index) => {
             return (
-              <StyledCol key={giveaway.id || index} span={6} gutter={gutter}>
+              <StyledCol
+                key={giveaway.id || index}
+                span={6}
+                gutter={GUTTER_SIZE}
+              >
                 <GiveawayItem {...giveaway} />
               </StyledCol>
             )

@@ -31,7 +31,7 @@ export const rootReducer = (state = INITIAL_STATE, action) => {
         ...state,
         all: {
           ...state.all,
-          ...action.payload.giveaway,
+          ...action.payload.giveaways,
         },
       }
 

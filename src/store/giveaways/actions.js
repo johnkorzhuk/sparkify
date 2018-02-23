@@ -7,10 +7,10 @@ export const UPDATE_FILTER_SORT_ORDER = "giveaways/UPDATE_FILTER_SORT_ORDER,"
 export const ADD_ITEMS_TO_PAGE = "giveaways/ADD_ITEMS_TO_PAGE"
 
 // ACTION CREATORS
-export const addGiveawayAction = giveaway => ({
+export const addGiveawaysAction = giveaways => ({
   type: ADD,
   payload: {
-    giveaway,
+    giveaways,
   },
 })
 
@@ -52,20 +52,19 @@ export const addItemsToPageAction = amount => ({
 // BOUND ACTION CREATORS
 export const getGiveawaysFromStore = storeQuery => async dispatch => {
   dispatch(setLoadingAction(true))
-
   try {
     const snapshot = await storeQuery.get()
     dispatch(setLoadingAction(false))
 
-    snapshot.forEach(doc => {
-      const gift = doc.data()
+    const giveaways = {}
 
-      dispatch(
-        addGiveawayAction({
-          [gift.id]: gift,
-        }),
-      )
+    snapshot.forEach(doc => {
+      const giveaway = doc.data()
+
+      giveaways[giveaway.id] = giveaway
     })
+
+    dispatch(addGiveawaysAction(giveaways))
 
     dispatch(setAllLoadedAction(snapshot.empty))
 
@@ -86,7 +85,7 @@ export const getGiveawaysFromAlgolia = query => async dispatch => {
 
     hits.forEach(gift => {
       dispatch(
-        addGiveawayAction({
+        addGiveawaysAction({
           [gift.id]: gift,
         }),
       )
