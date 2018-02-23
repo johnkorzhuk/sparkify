@@ -20,65 +20,71 @@ export const selectFilteredSortedGifts = createSelector(
     // TODO handle hideViewed
     const { sort, ...filters } = sortFilters
 
-    return filterSortOrder.reduce(
-      (aggr, curr) => {
-        if (curr === "filter") {
-          return Object.keys(filters).reduce(
-            (aggr, curr) => {
-              if (curr === "hideViewed") {
-                if (filters[curr]) {
-                  return aggr.filter(({ id }) => {
-                    return entered.id !== id
-                  })
-                } else {
-                  return aggr
-                }
-              }
+    return filterSortOrder.reduce((aggr, curr) => {
+      if (curr === "filter") {
+        return Object.keys(filters).reduce(
+          (aggr, curr) => {
+            if (curr === "hideViewed") {
               if (filters[curr]) {
-                if (curr === "searchInput") {
-                  const options = {
-                    shouldSort: true,
-                    threshold: 0.6,
-                    location: 0,
-                    distance: 100,
-                    maxPatternLength: 32,
-                    minMatchCharLength: 1,
-                    keys: [
-                      "title",
-                      "description",
-                      "location",
-                      "link",
-                      "type",
-                      "category",
-                    ],
-                  }
-                  const fuse = new FuseFuzzy(aggr, options)
-
-                  return fuse.search(filters[curr])
-                } else {
-                  return aggr.filter(gift => {
-                    return gift[curr] === filters[curr]
-                  })
-                }
+                return aggr.filter(({ id }) => {
+                  return entered.id !== id
+                })
+              } else {
+                return aggr
               }
+            }
+            if (filters[curr]) {
+              if (curr === "searchInput") {
+                const options = {
+                  shouldSort: true,
+                  threshold: 0.6,
+                  location: 0,
+                  distance: 100,
+                  maxPatternLength: 32,
+                  minMatchCharLength: 1,
+                  keys: [
+                    "title",
+                    "description",
+                    "location",
+                    "link",
+                    "type",
+                    "category",
+                  ],
+                }
+                const fuse = new FuseFuzzy(aggr, options)
 
-              return aggr
-            },
-            [...aggr],
-          )
-        } else if (curr === "sort") {
-          return aggr.sort((a, b) => {
-            if (sort.order === "asc") {
-              return a[sort.value] - b[sort.value]
+                return fuse.search(filters[curr])
+              } else {
+                return aggr.filter(gift => {
+                  return gift[curr] === filters[curr]
+                })
+              }
             }
 
-            return b[sort.value] - a[sort.value]
-          })
-        }
+            return aggr
+          },
+          [...aggr],
+        )
+      } else if (curr === "sort") {
+        return aggr.sort((a, b) => {
+          let valueA = a[sort.value]
+          let valueB = b[sort.value]
+          // TODO: this code is fragile. this assumes all sortable values are either a number or
+          // a Date string / Date object
+          if (typeof valueA !== "number") {
+            valueA = Date.parse(valueA)
+            valueB = Date.parse(valueB)
+          }
 
-        return aggr
-      },
-      [...allGiveaways],
-    )
+          if (sort.order === "asc") {
+            return valueA - valueB
+          }
+
+          return valueB - valueA
+        })
+      }
+
+      return aggr
+    }, Object.values(allGiveaways))
   },
 )

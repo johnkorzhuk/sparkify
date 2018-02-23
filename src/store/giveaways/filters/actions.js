@@ -1,4 +1,4 @@
-import { setAllLoadedAction } from "../actions"
+import { setAllLoadedAction, updateFilterSortOrderAction } from "../actions"
 
 // ACTIONS
 export const RESET_ALL = "giveaways/filters/RESET_ALL"
@@ -31,13 +31,22 @@ export const setFilterAction = (filter, value, order) => ({
 export const resetAllFilters = () => dispatch => {
   dispatch(resetAllAction())
   dispatch(setAllLoadedAction(false))
+  dispatch(updateFilterSortOrderAction(["filter", "sort"]))
 }
 
 export const resetFilter = filter => dispatch => {
   dispatch(resetFilterAction(filter))
   dispatch(setAllLoadedAction(false))
+
+  if (filter === "searchInput") {
+    dispatch(updateFilterSortOrderAction(["filter", "sort"]))
+  }
 }
 
 export const setFilter = (filter, value, order) => (dispatch, getState) => {
   dispatch(setFilterAction(filter, value, order))
+
+  if (filter !== "searchInput") {
+    // dispatch(updateFilterSortOrderAction(["filter", "sort"]))
+  }
 }

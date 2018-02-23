@@ -57,8 +57,14 @@ export const getGiveawaysFromStore = storeQuery => async dispatch => {
     const snapshot = await storeQuery.get()
     dispatch(setLoadingAction(false))
 
-    snapshot.forEach((doc, index) => {
-      dispatch(addGiveawayAction(doc.data()))
+    snapshot.forEach(doc => {
+      const gift = doc.data()
+
+      dispatch(
+        addGiveawayAction({
+          [gift.id]: gift,
+        }),
+      )
     })
 
     dispatch(setAllLoadedAction(snapshot.empty))
@@ -79,7 +85,11 @@ export const getGiveawaysFromAlgolia = query => async dispatch => {
     dispatch(setLoadingAction(false))
 
     hits.forEach(gift => {
-      dispatch(addGiveawayAction(gift))
+      dispatch(
+        addGiveawayAction({
+          [gift.id]: gift,
+        }),
+      )
     })
 
     if (nbPages > 0 && page < nbPages) {

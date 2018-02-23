@@ -13,7 +13,7 @@ import filters from "./filters/reducer"
 export const GIVEAWAY_LIMIT = 12
 
 export const INITIAL_STATE = {
-  all: [],
+  all: {},
   allLoaded: false,
   loading: false,
   itemsPerPage: GIVEAWAY_LIMIT,
@@ -29,10 +29,10 @@ export const rootReducer = (state = INITIAL_STATE, action) => {
     case ADD:
       return {
         ...state,
-        all: [
-          ...state.all.filter(({ id }) => id !== action.payload.giveaway.id),
-          action.payload.giveaway,
-        ],
+        all: {
+          ...state.all,
+          ...action.payload.giveaway,
+        },
       }
 
     case SET_ALL_LOADED:
@@ -67,7 +67,7 @@ export const rootReducer = (state = INITIAL_STATE, action) => {
     case UPDATE_FILTER_SORT_ORDER:
       return {
         ...state,
-        filterSortOrder: action.payload.order,
+        filterSortOrder: [...action.payload.order],
       }
 
     default:
