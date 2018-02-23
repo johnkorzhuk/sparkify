@@ -21,11 +21,6 @@ import {
   CommentEntry,
 } from "./components/icons/types"
 
-export const ALGOLIA = {
-  searchKey: "0c877bb4cf9034fda386d38816ab3541",
-  appId: "RF7Z503M35",
-}
-
 export const AUTHED_ROUTES = ["/giveaways", "/profile", "/submit"]
 
 export const LOCATIONS = ["U.S.A", "Canada", "Mexico", "Europe", "Worldwide"]

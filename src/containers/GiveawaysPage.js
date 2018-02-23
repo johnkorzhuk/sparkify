@@ -1,9 +1,9 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
-import algoliaSearch from "algoliasearch"
 import debounce from "lodash.debounce"
 
 import firebase from "../services/firebase"
+import algolia from "../services/algolia"
 import {
   getGiveawaysFromStore,
   getGiveawaysFromAlgolia,
@@ -16,24 +16,16 @@ import {
   selectFilterState,
 } from "../store/giveaways/filters/selectors"
 import { selectFilteredSortedGifts } from "../store/giveaways/selectors"
-import { ALGOLIA } from "../config"
 import { GIVEAWAY_LIMIT } from "../store/giveaways/reducer"
 
 import GiveawaysPage from "../components/pages/Giveaways"
-
-const { appId, searchKey } = ALGOLIA
 
 class GiveawaysPageContainer extends Component {
   lastDocument = null
   giveawaysCollection = firebase.store.collection("giveaways")
   usersCollection = firebase.store.collection("users")
-  index = algoliaSearch(appId, searchKey).initIndex("giveaways")
   // for algolia pagination
   page = 0
-
-  componentWillMount() {
-    this.index.searchCacheEnabled = true
-  }
 
   async componentDidMount() {
     const { getGiveawaysFromStore, sort, category, type } = this.props
@@ -122,7 +114,7 @@ class GiveawaysPageContainer extends Component {
   queryBySearchInput = debounce(async input => {
     const { getGiveawaysFromAlgolia } = this.props
 
-    const query = this.index.search({
+    const query = algolia.giveaways.search({
       query: input,
       hitsPerPage: GIVEAWAY_LIMIT,
       page: this.page,
@@ -143,7 +135,7 @@ class GiveawaysPageContainer extends Component {
       filterSortOrder,
       search,
     } = this.props
-
+    console.log(this.lastDocument)
     if (filterSortOrder[filterSortOrder.length - 1] === "sort") {
       if (giveaways.length <= itemsPerPage + 4) {
         let query = this.generateGiveawaysQuery({
