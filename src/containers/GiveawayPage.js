@@ -1,10 +1,15 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
+import styled from "styled-components"
 
 import firebase from "../services/firebase"
 import { getGiveawayById } from "../store/giveaways/actions"
 
 import GiveawayPage from "../components/pages/Giveaway"
+
+const Placeholder = styled.div`
+  height: 100vh;
+`
 
 class GiveawayPageContainer extends Component {
   async componentDidMount() {
@@ -22,7 +27,11 @@ class GiveawayPageContainer extends Component {
 
   render() {
     const { giveaway, ...props } = this.props
-    return giveaway ? <GiveawayPage {...props} {...giveaway} /> : null
+    return giveaway ? (
+      <GiveawayPage {...props} {...giveaway} />
+    ) : (
+      <Placeholder />
+    )
   }
 }
 

@@ -1,10 +1,11 @@
 import React from "react"
 import { Button } from "antd"
 import styled from "styled-components"
+import { Link } from "react-router-dom"
 
 import { CATEGORY_RESOURCES, TYPE_RESOURCES } from "../../config"
 
-import { Container } from "../styled"
+import { Container as DefaultContainer } from "../styled"
 import Countdown from "../common/Countdown"
 import ViewMoreCarousel from "../../containers/ViewMoreCarousel"
 
@@ -13,7 +14,6 @@ const GiveawayContainer = styled.div`
   ${({ gradient }) => gradient};
   border-radius: 16px;
   position: relative;
-  /* box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.25); */
   display: flex;
 `
 
@@ -59,13 +59,31 @@ const ContentContainer = styled.div`
   }
 `
 
+const SeeAllContainer = DefaultContainer.extend`
+  display: flex;
+  justify-content: center;
+`
+
+const PromoContainer = DefaultContainer.extend`
+  margin-top: 160px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+
+  h3 {
+    color: #333;
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+`
+
 const StyledCarousel = styled(ViewMoreCarousel)`
   margin-top: 120px;
 
   > h3 {
     color: #333;
     font-size: 18px;
-    text-transform: lowercase;
   }
 `
 
@@ -95,7 +113,7 @@ const GiveawayPage = ({
 
   return (
     <div>
-      <Container>
+      <DefaultContainer>
         <GiveawayContainer gradient={gradient}>
           <ImageContainer image={images[0]} />
           <ContentContainer>
@@ -110,12 +128,25 @@ const GiveawayPage = ({
             </Button>
           </ContentContainer>
         </GiveawayContainer>
-      </Container>
+      </DefaultContainer>
       <StyledCarousel
         heading="More giveaways like this"
         itemWidth={200}
         marginX={10}
       />
+      <SeeAllContainer>
+        <Button type="primary" size="large">
+          See All Giveaways
+        </Button>
+      </SeeAllContainer>
+      <PromoContainer>
+        <h3>Want to promote your giveaway with Sparkify?</h3>
+        <Link to="/faq">
+          <Button type="primary" size="large">
+            Learn More
+          </Button>
+        </Link>
+      </PromoContainer>
     </div>
   )
 }

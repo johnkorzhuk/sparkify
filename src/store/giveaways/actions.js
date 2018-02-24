@@ -99,7 +99,7 @@ export const getGiveawaysFromAlgolia = (
     hits.forEach(giveaway => {
       giveaways[giveaway.id] = giveaway
     })
-    console.log(hits)
+
     dispatch(addGiveawaysAction(giveaways))
 
     if (carousel) {

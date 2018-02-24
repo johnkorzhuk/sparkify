@@ -3,8 +3,12 @@ import { Row, Col, Button } from "antd"
 import styled from "styled-components"
 
 import GiveawayFilters from "../../containers/GiveawayFilters"
-import { Container } from "../styled"
+import { Container as DefaultContainer } from "../styled"
 import GiveawayItem from "../GiveawayPreviewItem"
+
+const Container = DefaultContainer.extend`
+  min-height: 80vh;
+`
 
 const StyledRow = styled(Row)`
   max-width: 1000px;

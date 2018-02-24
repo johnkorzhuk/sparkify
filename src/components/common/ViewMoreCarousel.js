@@ -8,7 +8,7 @@ import GiveawayPreviewItem from "../GiveawayPreviewItem"
 const Container = styled.div`
   overflow-y: hidden;
   max-width: 1260px;
-  margin: 0 auto;
+  margin: 0 auto 20px;
   padding: 0 40px;
 
   @media (min-width: 1300px) {
