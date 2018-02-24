@@ -6,21 +6,35 @@ export const ALGOLIA_CLIENT_KEYS = {
 }
 
 class Algolia {
-  constructor({ searchKey, appId, indexes }) {
-    const algolia = algoliaSearch(appId, searchKey)
+  constructor({ searchKey, appId, indices }) {
+    this._algolia = algoliaSearch(appId, searchKey)
 
-    Object.entries(indexes).forEach(([index, config]) => {
-      this[index] = algolia.initIndex(index)
-      this[index].searchCacheEnabled = config.cached
+    this._configure(indices)
+  }
+
+  _configure(indices) {
+    Object.entries(indices).forEach(([index, { searchCacheEnabled }]) => {
+      this[index] = this._algolia.initIndex(index)
+      this[index].searchCacheEnabled = searchCacheEnabled || false
+
+      // if (setSettings) {
+      //   const { searchableAttributes } = setSettings
+
+      //   if (searchableAttributes) {
+      //     this[index].setSettings({
+      //       searchableAttributes,
+      //     })
+      //   }
+      // }
     })
   }
 }
 
 export default new Algolia({
   ...ALGOLIA_CLIENT_KEYS,
-  indexes: {
+  indices: {
     giveaways: {
-      cached: true,
+      searchCacheEnabled: true,
     },
   },
 })

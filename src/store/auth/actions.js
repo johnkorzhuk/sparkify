@@ -121,6 +121,7 @@ export const startListeningToAuthChanges = firebase => (dispatch, getState) => {
     if (user) {
       dispatch(loginAction(user))
 
+      // TODO: look into batching these results
       getEnteredGiveaways(firebase, user.uid)(dispatch, getState)
       getCreatedGiveaways(firebase, user.uid)(dispatch, getState)
     } else {

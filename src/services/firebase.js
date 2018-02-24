@@ -17,10 +17,10 @@ class Firebase {
     this.store = firebase.firestore()
     this.auth = firebase.auth()
     this.storage = firebase.storage().ref()
-    this._config(custom)
+    this._configure(custom)
   }
 
-  async _config({ offline, authProviders }) {
+  async _configure({ offline, authProviders }) {
     if (offline) {
       try {
         await this._firebase.firestore().enablePersistence()

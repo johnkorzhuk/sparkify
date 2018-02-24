@@ -42,6 +42,7 @@ const Giveaways = ({
   loading,
   loadMore,
   itemsPerPage,
+  onGiveawayClick,
 }) => {
   return (
     <Container>
@@ -65,7 +66,7 @@ const Giveaways = ({
                 span={6}
                 gutter={GUTTER_SIZE}
               >
-                <GiveawayItem {...giveaway} />
+                <GiveawayItem {...giveaway} onGiveawayClick={onGiveawayClick} />
               </StyledCol>
             )
           })}

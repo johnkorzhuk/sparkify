@@ -4,9 +4,10 @@ import {
   ADD,
   SET_ALL_LOADED,
   SET_LOADING,
-  ERROR,
+  SET_ERROR,
   ADD_ITEMS_TO_PAGE,
   UPDATE_FILTER_SORT_ORDER,
+  ADD_CAROUSEL_ITEMS,
 } from "./actions"
 import filters from "./filters/reducer"
 
@@ -18,6 +19,7 @@ export const INITIAL_STATE = {
   loading: false,
   itemsPerPage: GIVEAWAY_LIMIT,
   filterSortOrder: ["filter", "sort"],
+  carouselItemIds: [],
   error: {
     hasError: false,
     message: "",
@@ -47,7 +49,7 @@ export const rootReducer = (state = INITIAL_STATE, action) => {
         loading: action.payload.loading,
       }
 
-    case ERROR:
+    case SET_ERROR:
       return {
         ...state,
         loading: false,
@@ -68,6 +70,12 @@ export const rootReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         filterSortOrder: [...action.payload.order],
+      }
+
+    case ADD_CAROUSEL_ITEMS:
+      return {
+        ...state,
+        carouselItemIds: [...state.carouselItemIds, ...action.payload.ids],
       }
 
     default:

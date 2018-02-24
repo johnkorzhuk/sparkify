@@ -2,6 +2,8 @@ import { createSelector } from "reselect"
 import shortId from "short-id"
 import FuseFuzzy from "fuse.js"
 
+import { SEARCHABLE_ATTRIBUTES } from "../../config"
+
 import { selectFilterState } from "./filters/selectors"
 import {
   selectEnteredGiveaways,
@@ -9,6 +11,7 @@ import {
 } from "../user/selectors"
 
 export const selectAllGiveaways = state => state.giveaways.root.all
+export const selectCarouselIds = state => state.giveaways.root.carouselItemIds
 export const selectFilterSortOrder = state =>
   state.giveaways.root.filterSortOrder
 
@@ -50,14 +53,7 @@ export const selectFilteredSortedGifts = createSelector(
                   distance: 100,
                   maxPatternLength: 32,
                   minMatchCharLength: 1,
-                  keys: [
-                    "title",
-                    "description",
-                    "location",
-                    "link",
-                    "type",
-                    "category",
-                  ],
+                  keys: SEARCHABLE_ATTRIBUTES,
                 }
                 const fuse = new FuseFuzzy(aggr, options)
 
@@ -94,5 +90,19 @@ export const selectFilteredSortedGifts = createSelector(
 
       return aggr
     }, Object.values(allGiveaways))
+  },
+)
+
+export const selectCarouselItems = createSelector(
+  [selectAllGiveaways, selectCarouselIds],
+  (giveaways, ids) => {
+    return Object.values(
+      ids.reduce((aggr, curr) => {
+        return {
+          ...aggr,
+          [curr]: giveaways[curr],
+        }
+      }, {}),
+    )
   },
 )

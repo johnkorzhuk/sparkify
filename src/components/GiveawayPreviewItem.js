@@ -1,23 +1,21 @@
 import React from "react"
 import styled from "styled-components"
-import Countdown from "react-countdown-now"
 
 import { CATEGORY_RESOURCES, TYPE_RESOURCES } from "../config"
+
+import Countdown from "./common/Countdown"
 
 const Card = styled.div`
   width: 100%;
   height: 200px;
   ${({ gradient }) => gradient};
-  list-style: none;
   margin: 0;
   border-radius: 16px;
   position: relative;
   box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.25);
   box-sizing: border-box;
   cursor: pointer;
-  filter: hue-rotate(0deg);
-  transition: box-shadow 200ms linear, transform 200ms linear,
-    filter 200ms linear;
+  transition: box-shadow 200ms linear, transform 200ms linear;
 
   &:hover {
     box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.35);
@@ -99,13 +97,26 @@ const countdownRenderer = ({ days, hours, minutes, seconds }) => {
   return <span>{days}</span>
 }
 
-const GiveawayPrevItem = ({ title, category, value, type, endDate }) => {
+const GiveawayPrevItem = ({
+  title,
+  category,
+  value,
+  type,
+  endDate,
+  id,
+  onGiveawayClick,
+  ...props
+}) => {
   const CategoryIcon = CATEGORY_RESOURCES[category].Icon
   const TypeIcon = TYPE_RESOURCES[type].Icon
   const gradient = CATEGORY_RESOURCES[category].gradient
 
   return (
-    <Card gradient={gradient}>
+    <Card
+      gradient={gradient}
+      onClick={() => onGiveawayClick && onGiveawayClick(id)}
+      {...props}
+    >
       <CardIconContainer>
         <CategoryIcon color="white" />
         <CardCountdownContaner>

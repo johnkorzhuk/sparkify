@@ -13,14 +13,7 @@ const StyledForm = styled(Form)`
   justify-content: center;
 `
 
-const StyledCascader = styled(Cascader)`
-  width: auto !important;
-  > .ant-cascader-picker-label {
-    padding-right: 20px;
-  }
-`
-
-const SearchFormItem = styled(Form.Item)`
+const SearchFormItem = styled(FormItem)`
   flex-grow: 3;
 
   > .ant-form-item-control-wrapper {
@@ -28,20 +21,13 @@ const SearchFormItem = styled(Form.Item)`
   }
 `
 
-const SelectFormItem = styled(Form.Item)`
-  min-width: 110px !important;
+const SelectFormItem = styled(({ minWidth, ...props }) => (
+  <FormItem {...props} />
+))`
+  min-width: ${({ minWidth }) => minWidth || 110}px !important;
+
   > .ant-form-item-control-wrapper {
     width: 100%;
-  }
-`
-
-const CascaderFormItem = styled(Form.Item)`
-  flex-grow: 3;
-
-  > .ant-form-item-control,
-  .ant-form-item-control-wrapper,
-  .ant-cascader-picker {
-    width: 100% !important;
   }
 `
 
@@ -105,7 +91,7 @@ const GiveawayFilters = ({
           ))}
         </Select>
       </SelectFormItem>
-      <SelectFormItem>
+      <SelectFormItem minWidth={160}>
         <Select
           value={type}
           onChange={value => {

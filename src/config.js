@@ -21,6 +21,14 @@ import {
   CommentEntry,
 } from "./components/icons/types"
 
+// match those of algolia settings
+export const SEARCHABLE_ATTRIBUTES = [
+  "title",
+  "description",
+  "location",
+  "link",
+]
+
 export const AUTHED_ROUTES = ["/giveaways", "/profile", "/submit"]
 
 export const LOCATIONS = ["U.S.A", "Canada", "Mexico", "Europe", "Worldwide"]

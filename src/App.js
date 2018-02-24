@@ -12,6 +12,7 @@ import HomePage from "./components/pages/Home"
 import FAQPage from "./components/pages/FAQ"
 import LoginPage from "./containers/LoginPage"
 import SubmitGiveawayPage from "./containers/SubmitGiveawayPage"
+import GiveawayPage from "./containers/GiveawayPage"
 import GiveawaysPage from "./containers/GiveawaysPage"
 
 // import { generateGiveaways } from "./store/giveaways/utils"
@@ -73,6 +74,7 @@ class App extends Component {
             <Route path="/register" component={LoginPage} />
             <Route path="/submit" component={SubmitGiveawayPage} />
             <Route path="/giveaways" component={GiveawaysPage} />
+            <Route path="/:giveawayId" component={GiveawayPage} />
           </Switch>
           <Footer />
         </div>

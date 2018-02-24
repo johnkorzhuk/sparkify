@@ -2,9 +2,10 @@
 export const ADD = "giveaways/ADD_GIVEAWAY"
 export const SET_ALL_LOADED = "giveaways/SET_ALL_LOADED"
 export const SET_LOADING = "giveaways/SET_LOADING"
-export const ERROR = "giveaways/ERROR"
+export const SET_ERROR = "giveaways/ERROR"
 export const UPDATE_FILTER_SORT_ORDER = "giveaways/UPDATE_FILTER_SORT_ORDER,"
 export const ADD_ITEMS_TO_PAGE = "giveaways/ADD_ITEMS_TO_PAGE"
+export const ADD_CAROUSEL_ITEMS = "giveaways/ADD_CAROUSEL_ITEMS"
 
 // ACTION CREATORS
 export const addGiveawaysAction = giveaways => ({
@@ -28,8 +29,8 @@ export const setLoadingAction = loading => ({
   },
 })
 
-export const errorAction = message => ({
-  action: ERROR,
+export const setErrorAction = message => ({
+  type: SET_ERROR,
   payload: {
     message,
   },
@@ -46,6 +47,13 @@ export const addItemsToPageAction = amount => ({
   type: ADD_ITEMS_TO_PAGE,
   payload: {
     amount,
+  },
+})
+
+export const addCarouselItemsAction = ids => ({
+  type: ADD_CAROUSEL_ITEMS,
+  payload: {
+    ids,
   },
 })
 
@@ -71,11 +79,14 @@ export const getGiveawaysFromStore = storeQuery => async dispatch => {
     return snapshot.docs[snapshot.docs.length - 1]
   } catch (error) {
     console.log(error.message)
-    // dispatch(errorAction(error.message))
+    // dispatch(setErrorAction(error.message))
   }
 }
 
-export const getGiveawaysFromAlgolia = query => async dispatch => {
+export const getGiveawaysFromAlgolia = (
+  query,
+  { carousel },
+) => async dispatch => {
   dispatch(setLoadingAction(true))
 
   try {
@@ -83,13 +94,17 @@ export const getGiveawaysFromAlgolia = query => async dispatch => {
 
     dispatch(setLoadingAction(false))
 
-    hits.forEach(gift => {
-      dispatch(
-        addGiveawaysAction({
-          [gift.id]: gift,
-        }),
-      )
+    const giveaways = {}
+
+    hits.forEach(giveaway => {
+      giveaways[giveaway.id] = giveaway
     })
+    console.log(hits)
+    dispatch(addGiveawaysAction(giveaways))
+
+    if (carousel) {
+      dispatch(addCarouselItemsAction(Object.keys(giveaways)))
+    }
 
     if (nbPages > 0 && page < nbPages) {
       return page + 1
@@ -101,10 +116,37 @@ export const getGiveawaysFromAlgolia = query => async dispatch => {
   }
 }
 
+export const getGiveawayById = (firebase, history, id) => async dispatch => {
+  try {
+    dispatch(setLoadingAction(true))
+
+    const snap = await firebase.giveawaysCollection.doc(id).get()
+    dispatch(setLoadingAction(false))
+
+    if (snap.exists) {
+      const giveaway = snap.data()
+      dispatch(
+        addGiveawaysAction({
+          [giveaway.id]: giveaway,
+        }),
+      )
+    } else {
+      history.push("/404")
+    }
+  } catch (error) {
+    console.log(error)
+    dispatch(setErrorAction(error.message))
+  }
+}
+
 export const addItemsToPage = amount => dispatch => {
   dispatch(addItemsToPageAction(amount))
 }
 
 export const updateFilterSortOrder = order => dispatch => {
   dispatch(updateFilterSortOrderAction(order))
+}
+
+export const setAllLoaded = allLoaded => dispatch => {
+  dispatch(setAllLoadedAction(allLoaded))
 }
