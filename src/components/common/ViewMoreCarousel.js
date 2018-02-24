@@ -31,6 +31,10 @@ const StyledGiveawayPreviewItem = styled(GiveawayPreviewItem)`
 
 const I_SCROLL_OPTIONS = {
   scrollX: true,
+  eventPassthrough: true,
+  disablePointer: true,
+  disableTouch: false,
+  disableMouse: false,
 }
 
 const ViewMoreCarousel = ({ heading, items, ...props }) => {
