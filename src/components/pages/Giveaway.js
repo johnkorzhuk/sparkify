@@ -94,23 +94,29 @@ const GiveawayPage = ({
   const { gradient } = CATEGORY_RESOURCES[category]
 
   return (
-    <Container>
-      <GiveawayContainer gradient={gradient}>
-        <ImageContainer image={images[0]} />
-        <ContentContainer>
-          <h3>{title}</h3>
-          <p>{description}</p>
-          <span>Value: ${value}</span>
-          <span>Sponsor: {type}</span>
-          <span>Location: {location}</span>
-          <Countdown date={endDate} renderer={countdownRenderer} />
-          <Button href="#" type="primary" size="large">
-            Enter Giveaway
-          </Button>
-        </ContentContainer>
-      </GiveawayContainer>
-      <StyledCarousel heading="More giveaways like this" />
-    </Container>
+    <div>
+      <Container>
+        <GiveawayContainer gradient={gradient}>
+          <ImageContainer image={images[0]} />
+          <ContentContainer>
+            <h3>{title}</h3>
+            <p>{description}</p>
+            <span>Value: ${value}</span>
+            <span>Sponsor: {type}</span>
+            <span>Location: {location}</span>
+            <Countdown date={endDate} renderer={countdownRenderer} />
+            <Button href="#" type="primary" size="large">
+              Enter Giveaway
+            </Button>
+          </ContentContainer>
+        </GiveawayContainer>
+      </Container>
+      <StyledCarousel
+        heading="More giveaways like this"
+        itemWidth={200}
+        marginX={10}
+      />
+    </div>
   )
 }
 
