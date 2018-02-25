@@ -8,12 +8,13 @@ const cors = require("cors");
 const serviceAccount = require("./service-account.json");
 
 const { cleanupExpired } = require("./controllers/expired/index.js");
+const { deleteCollection } = require("./helpers/deleteCollection/index.js");
 
 const ALGOLIA_ID = functions.config().algolia.app_id;
 const ALGOLIA_ADMIN_KEY = functions.config().algolia.api_key;
 const CRON_KEY = functions.config().cron.key;
 
-const ALGOLIA_INDEX_NAME = "giveaways";
+const ALGOLIA_GIVEAWAYS_INDEX = "giveaways";
 const client = algoliasearch(ALGOLIA_ID, ALGOLIA_ADMIN_KEY);
 
 const app = express();
@@ -43,7 +44,7 @@ onCreate(event => {
   giveaway.objectID = event.params.giveawayId;
 
   // Write to the algolia index
-  const index = client.initIndex(ALGOLIA_INDEX_NAME);
+  const index = client.initIndex(ALGOLIA_GIVEAWAYS_INDEX);
   return index.saveObject(giveaway);
 });
 
@@ -51,7 +52,7 @@ exports.onGiveawayDelete = functions.firestore.
 document("giveaways/{giveawayId}").
 onDelete(event => {
   const giveaway = event.data.data();
-  const index = client.initIndex(ALGOLIA_INDEX_NAME);
+  const index = client.initIndex(ALGOLIA_GIVEAWAYS_INDEX);
 
   return index.deleteObject(event.params.giveawayId);
 });
@@ -70,38 +71,47 @@ exports.onUserDelete = functions.auth.user().onDelete((() => {var _ref = (0, _as
       get();
 
       if (!giveawaysSnap.empty) {
-        const deleteBatch = admin.firestore().batch();
-        const moveBatch = admin.firestore().batch();
+        const deleteGiveawaysBatch = admin.firestore().batch();
+        const moveGiveawaysBatch = admin.firestore().batch();
 
         giveawaysSnap.forEach(function (doc) {
           const data = doc.data();
           const { id } = data;
 
-          deleteBatch.delete(doc.ref);
+          deleteGiveawaysBatch.delete(doc.ref);
 
-          moveBatch.set(
+          moveGiveawaysBatch.set(
           admin.
           firestore().
-          collection("expiredGiveaways").
+          collection("removedGiveaways").
           doc(id), (0, _extends3.default)({},
 
           data, {
-            removedMethod: "deleted" }));
+            removeMethod: "DELETE" }));
 
 
         });
 
+        const batchSize = 30;
+
         return yield Promise.all([
-        deleteBatch.commit(),
-        moveBatch.commit(),
+        deleteGiveawaysBatch.commit(),
+        moveGiveawaysBatch.commit(),
+        deleteCollection(
+        admin.firestore(),
+        `users/${uid}/enteredGiveaways`,
+        batchSize),
+
+        deleteCollection(
+        admin.firestore(),
+        `users/${uid}/createdGiveaways`,
+        batchSize),
+
         userRef.delete()]);
 
       }
-
       return;
     } catch (error) {
       console.error(error);
     }
-
-    return index.deleteObject(event.params.giveawayId);
   });return function (_x) {return _ref.apply(this, arguments);};})());

@@ -43,11 +43,11 @@ export const cleanupExpired = (admin, cronKey) => async (req, res) => {
       moveBatch.set(
         admin
           .firestore()
-          .collection("expiredGiveaways")
+          .collection("removedGiveaways")
           .doc(id),
         {
           ...data,
-          removedMethod: "expired",
+          removeMethod: "EXPIRY",
         },
       )
     })
@@ -57,17 +57,4 @@ export const cleanupExpired = (admin, cronKey) => async (req, res) => {
   } catch (error) {
     console.error(error)
   }
-
-  // .then(snap => {
-
-  // })
-  // .then(batches => {
-  //   return Promise.all(batches)
-  // })
-  // .then(() => {
-  //   return res.sendStatus(204)
-  // })
-  // .catch(error => {
-  //   console.error(error)
-  // })
 }

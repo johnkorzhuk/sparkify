@@ -43,11 +43,11 @@ const cleanupExpired = exports.cleanupExpired = (admin, cronKey) => (() => {var 
         moveBatch.set(
         admin.
         firestore().
-        collection("expiredGiveaways").
+        collection("removedGiveaways").
         doc(id), (0, _extends3.default)({},
 
         data, {
-          removedMethod: "expired" }));
+          removeMethod: "EXPIRY" }));
 
 
       });
@@ -57,17 +57,4 @@ const cleanupExpired = exports.cleanupExpired = (admin, cronKey) => (() => {var 
     } catch (error) {
       console.error(error);
     }
-
-    // .then(snap => {
-
-    // })
-    // .then(batches => {
-    //   return Promise.all(batches)
-    // })
-    // .then(() => {
-    //   return res.sendStatus(204)
-    // })
-    // .catch(error => {
-    //   console.error(error)
-    // })
   });return function (_x, _x2) {return _ref.apply(this, arguments);};})();
