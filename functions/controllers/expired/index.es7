@@ -45,7 +45,10 @@ export const cleanupExpired = (admin, cronKey) => async (req, res) => {
           .firestore()
           .collection("expiredGiveaways")
           .doc(id),
-        data,
+        {
+          ...data,
+          removedMethod: "expired",
+        },
       )
     })
 

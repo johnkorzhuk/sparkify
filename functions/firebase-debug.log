@@ -1,0 +1,196 @@
+[debug] [2018-02-25T19:42:10.808Z] ----------------------------------------------------------------------
+[debug] [2018-02-25T19:42:10.811Z] Command:       /Users/johnkorz/.nvm/versions/node/v9.3.0/bin/node /usr/local/bin/firebase deploy --only functions
+[debug] [2018-02-25T19:42:10.811Z] CLI Version:   3.15.0
+[debug] [2018-02-25T19:42:10.811Z] Platform:      darwin
+[debug] [2018-02-25T19:42:10.811Z] Node Version:  v9.3.0
+[debug] [2018-02-25T19:42:10.812Z] Time:          Sun Feb 25 2018 14:42:10 GMT-0500 (EST)
+[debug] [2018-02-25T19:42:10.812Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-02-25T19:42:10.823Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2018-02-25T19:42:10.824Z] > authorizing via signed-in user
+[debug] [2018-02-25T19:42:10.826Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/sparkify-30f42  
+ Sun Feb 25 2018 14:42:10 GMT-0500 (EST)
+[debug] [2018-02-25T19:42:11.392Z] <<< HTTP RESPONSE 200
+[debug] [2018-02-25T19:42:11.393Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/sparkify-30f42/tokens  
+ Sun Feb 25 2018 14:42:11 GMT-0500 (EST)
+[debug] [2018-02-25T19:42:11.813Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'sparkify-30f42'...
+[info] 
+[info] i  deploying functions
+[debug] [2018-02-25T19:42:12.264Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "serve": "firebase serve --only functions",
+    "shell": "firebase experimental:functions:shell",
+    "start": "npm run shell",
+    "predeploy": "babel ./**/*.es7 --retain-lines -d ./",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "dependencies": {
+    "algoliasearch": "^3.24.11",
+    "babel-runtime": "^6.26.0",
+    "cors": "^2.8.4",
+    "express": "^4.16.2",
+    "firebase-admin": "^5.9.0",
+    "firebase-functions": "^0.8.1",
+    "secure-compare": "^3.0.1"
+  },
+  "private": true,
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.6.1"
+  }
+}
+[info] i  functions: ensuring necessary APIs are enabled...
+[info] i  runtimeconfig: ensuring necessary APIs are enabled...
+[debug] [2018-02-25T19:42:12.265Z] >>> HTTP REQUEST GET https://servicemanagement.googleapis.com/v1/services/cloudfunctions.googleapis.com/projectSettings/sparkify-30f42?view=CONSUMER_VIEW  
+ Sun Feb 25 2018 14:42:12 GMT-0500 (EST)
+[debug] [2018-02-25T19:42:12.265Z] >>> HTTP REQUEST GET https://servicemanagement.googleapis.com/v1/services/runtimeconfig.googleapis.com/projectSettings/sparkify-30f42?view=CONSUMER_VIEW  
+ Sun Feb 25 2018 14:42:12 GMT-0500 (EST)
+[debug] [2018-02-25T19:42:13.446Z] <<< HTTP RESPONSE 200
+[info] ✔  runtimeconfig: all necessary APIs are enabled
+[debug] [2018-02-25T19:42:13.510Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: all necessary APIs are enabled
+[debug] [2018-02-25T19:42:13.511Z] >>> HTTP REQUEST GET https://appengine.googleapis.com/v1/apps/sparkify-30f42  
+ Sun Feb 25 2018 14:42:13 GMT-0500 (EST)
+[debug] [2018-02-25T19:42:13.511Z] >>> HTTP REQUEST GET https://apikeys.googleapis.com/v1/projects/sparkify-30f42/apiKeys  
+ Sun Feb 25 2018 14:42:13 GMT-0500 (EST)
+[debug] [2018-02-25T19:42:13.809Z] <<< HTTP RESPONSE 200
+[debug] [2018-02-25T19:42:14.008Z] <<< HTTP RESPONSE 200
+[info] i  functions: preparing functions directory for uploading...
+[debug] [2018-02-25T19:42:23.790Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/sparkify-30f42/configs  
+ Sun Feb 25 2018 14:42:23 GMT-0500 (EST)
+[debug] [2018-02-25T19:42:23.970Z] <<< HTTP RESPONSE 200
+[debug] [2018-02-25T19:42:23.971Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/sparkify-30f42/configs/cron/variables  
+ Sun Feb 25 2018 14:42:23 GMT-0500 (EST)
+[debug] [2018-02-25T19:42:23.972Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/sparkify-30f42/configs/algolia/variables  
+ Sun Feb 25 2018 14:42:23 GMT-0500 (EST)
+[debug] [2018-02-25T19:42:24.129Z] <<< HTTP RESPONSE 200
+[debug] [2018-02-25T19:42:24.130Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/sparkify-30f42/configs/algolia/variables/api_key  
+ Sun Feb 25 2018 14:42:24 GMT-0500 (EST)
+[debug] [2018-02-25T19:42:24.130Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/sparkify-30f42/configs/algolia/variables/app_id  
+ Sun Feb 25 2018 14:42:24 GMT-0500 (EST)
+[debug] [2018-02-25T19:42:24.130Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/sparkify-30f42/configs/algolia/variables/search_key  
+ Sun Feb 25 2018 14:42:24 GMT-0500 (EST)
+[debug] [2018-02-25T19:42:24.192Z] <<< HTTP RESPONSE 200
+[debug] [2018-02-25T19:42:24.192Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/sparkify-30f42/configs/cron/variables/key  
+ Sun Feb 25 2018 14:42:24 GMT-0500 (EST)
+[debug] [2018-02-25T19:42:24.275Z] <<< HTTP RESPONSE 200
+[debug] [2018-02-25T19:42:24.301Z] <<< HTTP RESPONSE 200
+[debug] [2018-02-25T19:42:24.310Z] <<< HTTP RESPONSE 200
+[debug] [2018-02-25T19:42:24.341Z] <<< HTTP RESPONSE 200
+[info] i  functions: packaged functions (88.38 KB) for uploading
+[debug] [2018-02-25T19:42:28.353Z] >>> HTTP REQUEST GET https://www.googleapis.com/storage/v1/b/staging.sparkify-30f42.appspot.com  
+ Sun Feb 25 2018 14:42:28 GMT-0500 (EST)
+[debug] [2018-02-25T19:42:28.639Z] <<< HTTP RESPONSE 200
+[debug] [2018-02-25T19:42:28.640Z] >>> HTTP REQUEST POST https://www.googleapis.com/upload/storage/v1/b/staging.sparkify-30f42.appspot.com/o?uploadType=media&name=firebase-functions-source ReadStream {
+  _readableState: 
+   ReadableState {
+     objectMode: false,
+     highWaterMark: 65536,
+     buffer: BufferList { head: [Object], tail: [Object], length: 1 },
+     length: 65536,
+     pipes: null,
+     pipesCount: 0,
+     flowing: null,
+     ended: false,
+     endEmitted: false,
+     reading: false,
+     sync: false,
+     needReadable: false,
+     emittedReadable: true,
+     readableListening: false,
+     resumeScheduled: false,
+     destroyed: false,
+     defaultEncoding: 'utf8',
+     awaitDrain: 0,
+     readingMore: false,
+     decoder: null,
+     encoding: null },
+  readable: true,
+  domain: null,
+  _events: { end: [Function] },
+  _eventsCount: 1,
+  _maxListeners: undefined,
+  path: '/var/folders/yq/jpltysc50l94lfzm078pdw400000gn/T/firebase-functions-12421jX0jbcz3YmlC.zip',
+  fd: 19,
+  flags: 'r',
+  mode: 438,
+  start: undefined,
+  end: undefined,
+  autoClose: true,
+  pos: undefined,
+  bytesRead: 65536 } 
+ Sun Feb 25 2018 14:42:28 GMT-0500 (EST)
+[debug] [2018-02-25T19:42:29.280Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: functions folder uploaded successfully
+[debug] [2018-02-25T19:42:29.282Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/projects/sparkify-30f42/locations/us-central1/functions  
+ Sun Feb 25 2018 14:42:29 GMT-0500 (EST)
+[debug] [2018-02-25T19:42:29.725Z] <<< HTTP RESPONSE 200
+[info] i  functions: updating function app...
+[debug] [2018-02-25T19:42:29.728Z] Trigger is: 
+[info] i  functions: updating function onGiveawayCreate...
+[debug] [2018-02-25T19:42:29.728Z] Trigger is: 
+[info] i  functions: updating function onGiveawayDelete...
+[debug] [2018-02-25T19:42:29.729Z] Trigger is: 
+[info] i  functions: updating function onUserDelete...
+[debug] [2018-02-25T19:42:29.730Z] Trigger is: 
+[debug] [2018-02-25T19:42:29.731Z] >>> HTTP REQUEST PUT https://cloudfunctions.googleapis.com/v1beta2/projects/sparkify-30f42/locations/us-central1/functions/app { sourceArchiveUrl: 'gs://staging.sparkify-30f42.appspot.com/firebase-functions-source',
+  name: 'projects/sparkify-30f42/locations/us-central1/functions/app',
+  entryPoint: 'app',
+  timeout: '60s',
+  availableMemoryMb: 256,
+  labels: { 'deployment-tool': 'cli-firebase' },
+  httpsTrigger: {} } 
+ Sun Feb 25 2018 14:42:29 GMT-0500 (EST)
+[debug] [2018-02-25T19:42:29.732Z] >>> HTTP REQUEST PUT https://cloudfunctions.googleapis.com/v1beta2/projects/sparkify-30f42/locations/us-central1/functions/onGiveawayCreate { sourceArchiveUrl: 'gs://staging.sparkify-30f42.appspot.com/firebase-functions-source',
+  name: 'projects/sparkify-30f42/locations/us-central1/functions/onGiveawayCreate',
+  entryPoint: 'onGiveawayCreate',
+  timeout: '60s',
+  availableMemoryMb: 256,
+  labels: { 'deployment-tool': 'cli-firebase' },
+  eventTrigger: 
+   { resource: 'projects/sparkify-30f42/databases/(default)/documents/giveaways/{giveawayId}',
+     eventType: 'providers/cloud.firestore/eventTypes/document.create' } } 
+ Sun Feb 25 2018 14:42:29 GMT-0500 (EST)
+[debug] [2018-02-25T19:42:29.733Z] >>> HTTP REQUEST PUT https://cloudfunctions.googleapis.com/v1beta2/projects/sparkify-30f42/locations/us-central1/functions/onGiveawayDelete { sourceArchiveUrl: 'gs://staging.sparkify-30f42.appspot.com/firebase-functions-source',
+  name: 'projects/sparkify-30f42/locations/us-central1/functions/onGiveawayDelete',
+  entryPoint: 'onGiveawayDelete',
+  timeout: '60s',
+  availableMemoryMb: 256,
+  labels: { 'deployment-tool': 'cli-firebase' },
+  eventTrigger: 
+   { resource: 'projects/sparkify-30f42/databases/(default)/documents/giveaways/{giveawayId}',
+     eventType: 'providers/cloud.firestore/eventTypes/document.delete' } } 
+ Sun Feb 25 2018 14:42:29 GMT-0500 (EST)
+[debug] [2018-02-25T19:42:29.733Z] >>> HTTP REQUEST PUT https://cloudfunctions.googleapis.com/v1beta2/projects/sparkify-30f42/locations/us-central1/functions/onUserDelete { sourceArchiveUrl: 'gs://staging.sparkify-30f42.appspot.com/firebase-functions-source',
+  name: 'projects/sparkify-30f42/locations/us-central1/functions/onUserDelete',
+  entryPoint: 'onUserDelete',
+  timeout: '60s',
+  availableMemoryMb: 256,
+  labels: { 'deployment-tool': 'cli-firebase' },
+  eventTrigger: 
+   { resource: 'projects/sparkify-30f42',
+     eventType: 'providers/firebase.auth/eventTypes/user.delete' } } 
+ Sun Feb 25 2018 14:42:29 GMT-0500 (EST)
+[debug] [2018-02-25T19:42:30.252Z] <<< HTTP RESPONSE 200
+[debug] [2018-02-25T19:42:30.252Z] <<< HTTP RESPONSE 200
+[debug] [2018-02-25T19:42:30.253Z] <<< HTTP RESPONSE 200
+[debug] [2018-02-25T19:42:30.253Z] <<< HTTP RESPONSE 200
+[debug] [2018-02-25T19:42:30.254Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/c3BhcmtpZnktMzBmNDIvdXMtY2VudHJhbDEvYXBwL2JQbkNZLWpOSlVr  
+ Sun Feb 25 2018 14:42:30 GMT-0500 (EST)
+[debug] [2018-02-25T19:42:30.255Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/c3BhcmtpZnktMzBmNDIvdXMtY2VudHJhbDEvb25HaXZlYXdheUNyZWF0ZS9LbGVPR09TV0NESQ  
+ Sun Feb 25 2018 14:42:30 GMT-0500 (EST)
+[debug] [2018-02-25T19:42:30.255Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/c3BhcmtpZnktMzBmNDIvdXMtY2VudHJhbDEvb25HaXZlYXdheURlbGV0ZS9xcVRISHdRMXJuYw  
+ Sun Feb 25 2018 14:42:30 GMT-0500 (EST)
+[debug] [2018-02-25T19:42:30.255Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1beta2/operations/c3BhcmtpZnktMzBmNDIvdXMtY2VudHJhbDEvb25Vc2VyRGVsZXRlLzMyTy1PLXA0aHlj  
+ Sun Feb 25 2018 14:42:30 GMT-0500 (EST)
+[debug] [2018-02-25T19:42:30.453Z] <<< HTTP RESPONSE 200
+[debug] [2018-02-25T19:42:30.617Z] <<< HTTP RESPONSE 200
+[debug] [2018-02-25T19:42:30.628Z] <<< HTTP RESPONSE 200
+[debug] [2018-02-25T19:42:30.636Z] <<< HTTP RESPONSE 200

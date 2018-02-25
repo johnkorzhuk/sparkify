@@ -1,4 +1,4 @@
-"use strict";const admin = require("firebase-admin");
+"use strict";var _extends2 = require("babel-runtime/helpers/extends");var _extends3 = _interopRequireDefault(_extends2);var _asyncToGenerator2 = require("babel-runtime/helpers/asyncToGenerator");var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}const admin = require("firebase-admin");
 const functions = require("firebase-functions");
 const algoliasearch = require("algoliasearch");
 const secureCompare = require("secure-compare");
@@ -28,64 +28,9 @@ admin.initializeApp({
 
 
 app.delete("/expired", cleanupExpired(admin, functions.config().cron.key));
+// app.get("/users/username", cleanupExpired(admin, functions.config().cron.key))
 
 exports.app = functions.https.onRequest(app);
-// exports.giveawayCleanup = functions.https.onRequest((req, res) => {
-//   const key = req.query.key
-
-//   // Exit if the keys don't match
-//   if (!secureCompare(key, functions.config().cron.key)) {
-//     console.log(
-//       "The key provided in the request does not match the key set in the environment. Check that",
-//       key,
-//       "matches the cron.key attribute in `firebase env:get`",
-//     )
-//     res
-//       .status(403)
-//       .send(
-//         'Security key does not match. Make sure your "key" URL query parameter matches the ' +
-//           "cron.key environment variable.",
-//       )
-
-//     return null
-//   }
-
-//   admin
-//     .firestore()
-//     .collection("giveaways")
-//     .orderBy("endDate")
-//     .where("endDate", "<", new Date(Date.now()))
-//     .get()
-//     .then(snap => {
-//       const deleteBatch = admin.firestore().batch()
-//       const moveBatch = admin.firestore().batch()
-//       snap.forEach(doc => {
-//         const data = doc.data()
-//         const id = data.id
-
-//         deleteBatch.delete(doc.ref)
-
-//         moveBatch.set(
-//           admin
-//             .firestore()
-//             .collection("expiredGiveaways")
-//             .doc(id),
-//           data,
-//         )
-//       })
-
-//       return [deleteBatch.commit(), moveBatch.commit()]
-//     })
-//     .then(batches => {
-//       return Promise.all(batches)
-//     })
-//     .then(() => {
-//       return res.sendStatus(204)
-//     })
-//     .catch(error => {
-//       console.error(error)
-//     })
-// })
 
 // Update the search index every time a giveaway is written.
 exports.onGiveawayCreate = functions.firestore.
@@ -110,3 +55,53 @@ onDelete(event => {
 
   return index.deleteObject(event.params.giveawayId);
 });
+
+exports.onUserDelete = functions.auth.user().onDelete((() => {var _ref = (0, _asyncToGenerator3.default)(function* (event) {
+    const { uid } = event.data;
+
+    try {
+      const userRef = admin.
+      firestore().
+      collection("users").
+      doc(uid);
+      const giveawaysRef = admin.firestore().collection("giveaways");
+      const giveawaysSnap = yield giveawaysRef.
+      where("createdBy.uid", "==", uid).
+      get();
+
+      if (!giveawaysSnap.empty) {
+        const deleteBatch = admin.firestore().batch();
+        const moveBatch = admin.firestore().batch();
+
+        giveawaysSnap.forEach(function (doc) {
+          const data = doc.data();
+          const { id } = data;
+
+          deleteBatch.delete(doc.ref);
+
+          moveBatch.set(
+          admin.
+          firestore().
+          collection("expiredGiveaways").
+          doc(id), (0, _extends3.default)({},
+
+          data, {
+            removedMethod: "deleted" }));
+
+
+        });
+
+        return yield Promise.all([
+        deleteBatch.commit(),
+        moveBatch.commit(),
+        userRef.delete()]);
+
+      }
+
+      return;
+    } catch (error) {
+      console.error(error);
+    }
+
+    return index.deleteObject(event.params.giveawayId);
+  });return function (_x) {return _ref.apply(this, arguments);};})());
