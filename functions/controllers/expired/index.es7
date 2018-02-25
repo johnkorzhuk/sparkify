@@ -1,0 +1,70 @@
+const secureCompare = require("secure-compare")
+
+export const cleanupExpired = (admin, cronKey) => async (req, res) => {
+  const { key } = req.query
+
+  // Exit if the keys don't match
+  if (!secureCompare(key, cronKey)) {
+    console.log(
+      "The key provided in the request does not match the key set in the environment. Check that",
+      key,
+      "matches the cron.key attribute in `firebase env:get`",
+    )
+    res
+      .status(403)
+      .send(
+        'Security key does not match. Make sure your "key" URL query parameter matches the ' +
+          "cron.key environment variable.",
+      )
+
+    return null
+  }
+  try {
+    const snap = await admin
+      .firestore()
+      .collection("giveaways")
+      .orderBy("endDate")
+      .where("endDate", "<", new Date(Date.now()))
+      .get()
+
+    if (snap.empty) {
+      return res.sendStatus(200)
+    }
+
+    const deleteBatch = admin.firestore().batch()
+    const moveBatch = admin.firestore().batch()
+
+    snap.forEach(doc => {
+      const data = doc.data()
+      const id = data.id
+
+      deleteBatch.delete(doc.ref)
+
+      moveBatch.set(
+        admin
+          .firestore()
+          .collection("expiredGiveaways")
+          .doc(id),
+        data,
+      )
+    })
+
+    await Promise.all([deleteBatch.commit(), moveBatch.commit()])
+    return res.sendStatus(204)
+  } catch (error) {
+    console.error(error)
+  }
+
+  // .then(snap => {
+
+  // })
+  // .then(batches => {
+  //   return Promise.all(batches)
+  // })
+  // .then(() => {
+  //   return res.sendStatus(204)
+  // })
+  // .catch(error => {
+  //   console.error(error)
+  // })
+}
