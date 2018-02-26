@@ -45,17 +45,29 @@ export const setGiveawayFilter = input => dispatch => {
 
 export const getGiveaways = (
   firebase,
-  profileGiveawayIds,
+  profileGiveaways,
   type,
 ) => async dispatch => {
   try {
     dispatch(setLoadingAction(true))
+    const profileGiveawayIds = Object.keys(profileGiveaways)
 
     const { data } = await axios.post(`${firebase.api.app}/giveaways`, {
       ids: profileGiveawayIds,
     })
 
-    dispatch(addGiveawaysAction(data, type))
+    const giveaways = data.map(giveaway => {
+      if (type === "entered") {
+        return {
+          ...giveaway,
+          enteredOn: profileGiveaways[giveaway.id].date,
+        }
+      }
+
+      return giveaway
+    })
+
+    dispatch(addGiveawaysAction(giveaways, type))
 
     dispatch(setLoadingAction(false))
   } catch (error) {

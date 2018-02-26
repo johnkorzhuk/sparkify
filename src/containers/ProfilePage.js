@@ -12,9 +12,9 @@ import ProfilePage from "../components/pages/ProfilePage"
 // }
 
 export default connect((state, { location }) => {
-  const ownGiveaways = location.pathname === "/profile/history"
+  const type = location.pathname === "/profile/history" ? "entered" : "created"
 
   return {
-    profileGiveaways: selectProfileGiveaways(ownGiveaways)(state),
+    profileGiveaways: selectProfileGiveaways(type)(state),
   }
 })(ProfilePage)

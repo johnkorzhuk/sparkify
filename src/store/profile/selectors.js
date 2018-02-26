@@ -5,11 +5,33 @@ import {
   selectCreatedGiveaways,
 } from "../user/selectors"
 
-export const selectProfileGiveaways = ownGiveaways =>
+export const selectProfileGiveawaysFiler = state =>
+  state.profile.giveaways.filter
+export const selectedCreatedGiveaways = state => state.profile.giveaways.created
+export const selectedEnteredGiveaways = state => state.profile.giveaways.entered
+
+export const selectProfileGiveaways = type =>
   createSelector(
     [selectEnteredGiveaways, selectCreatedGiveaways],
     (entered, created) => {
-      if (ownGiveaways) return Object.values(created)
-      return Object.values(entered)
+      if (type === "created") return created
+      return entered
+    },
+  )
+
+export const selectGiveaways = type =>
+  createSelector(
+    [
+      selectedCreatedGiveaways,
+      selectedEnteredGiveaways,
+      selectProfileGiveawaysFiler,
+    ],
+    (created, entered, filter) => {
+      const giveaways = type === "created" ? created : entered
+
+      if (!filter) {
+        // console.log(giveaways)
+      }
+      return giveaways
     },
   )

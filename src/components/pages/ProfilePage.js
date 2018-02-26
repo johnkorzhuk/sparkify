@@ -23,6 +23,7 @@ const ContentContain = styled.div`
 `
 
 const ProfilePage = ({ profileGiveaways }) => {
+  const renderProfileGiveaways = Object.keys(profileGiveaways).length > 0
   return (
     <Container>
       <NavContainer>
@@ -32,7 +33,7 @@ const ProfilePage = ({ profileGiveaways }) => {
         <Route
           path="/profile/history"
           render={props =>
-            profileGiveaways.length > 0 ? (
+            renderProfileGiveaways ? (
               <ProfileGiveaways
                 {...props}
                 profileGiveaways={profileGiveaways}
@@ -45,7 +46,7 @@ const ProfilePage = ({ profileGiveaways }) => {
         <Route
           path="/profile/giveaways"
           render={props =>
-            profileGiveaways.length > 0 ? (
+            renderProfileGiveaways ? (
               <ProfileGiveaways
                 {...props}
                 profileGiveaways={profileGiveaways}

@@ -4,7 +4,7 @@ import { compose } from "redux"
 import { withRouter } from "react-router-dom"
 
 import firebase from "../services/firebase"
-
+import { selectGiveaways } from "../store/profile/selectors"
 import {
   resetGiveawayFilter,
   setGiveawayFilter,
@@ -30,8 +30,8 @@ class ProfileGiveaway extends Component {
   async getGiveawayData() {
     const { type, getGiveaways, profileGiveaways, giveaways } = this.props
 
-    if (giveaways.length === 0) {
-      getGiveaways(firebase, profileGiveaways.map(({ id }) => id), type)
+    if (profileGiveaways) {
+      getGiveaways(firebase, profileGiveaways, type)
     }
   }
 
@@ -49,7 +49,7 @@ const enhance = compose(
       return {
         type,
         search: state.profile.giveaways.filter,
-        giveaways: state.profile.giveaways[type],
+        giveaways: selectGiveaways(type)(state),
         loading: state.profile.giveaways.loading,
       }
     },

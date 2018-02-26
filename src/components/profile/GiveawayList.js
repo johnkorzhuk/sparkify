@@ -39,6 +39,7 @@ const GiveawayList = ({
   resetGiveawayFilter,
   search,
   giveaways,
+  type,
 }) => {
   return (
     <Container>
@@ -57,6 +58,7 @@ const GiveawayList = ({
                   key={giveaway.id}
                   {...giveaway}
                   ownGiveaways={ownGiveaways}
+                  pageType={type}
                 />
               )
             })}

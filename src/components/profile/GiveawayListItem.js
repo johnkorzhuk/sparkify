@@ -29,6 +29,7 @@ const ActionItemsContainer = Item.withComponent("div").extend`
 `
 
 const ActionItem = styled.div`
+  cursor: pointer;
   &:first-child {
     margin-right: 20px;
   }
@@ -40,14 +41,21 @@ const StyledIcon = styled(({ Icon, ...props }) => <Icon {...props} />)`
 `
 
 const countdownRenderer = ({ days, hours, minutes, seconds }) => {
-  if (days === 0) {
+  if (days === 0 && hours === "00" && minutes === "00" && seconds === "00") {
+    return <span>Ended</span>
+  } else if (days === 0) {
     return (
       <span>
         {hours}:{minutes}:{seconds}
       </span>
     )
   }
-  return <span>{days}</span>
+
+  return (
+    <span>
+      {days} {days > 1 ? "days" : "day"}
+    </span>
+  )
 }
 
 const ActionItems = ({ handleDelete, handleEdit }) => {
@@ -66,12 +74,12 @@ const ActionItems = ({ handleDelete, handleEdit }) => {
 const GiveawayListItem = ({
   category,
   title,
-  owner,
-  ownGiveaways,
   endDate,
   value,
   handleDelete,
   handleEdit,
+  pageType,
+  createdBy,
 }) => {
   const { Icon } = CATEGORY_RESOURCES[category]
 
@@ -82,11 +90,11 @@ const GiveawayListItem = ({
       </Item>
       <Item>${value}</Item>
       <Item>{title}</Item>
-      {!ownGiveaways && <Item>{owner || "--"}</Item>}
+      {pageType === "entered" && <Item>{createdBy.username}</Item>}
       <Item>
         <Countdown date={endDate} renderer={countdownRenderer} />
       </Item>
-      {ownGiveaways && (
+      {pageType === "created" && (
         <ActionItems handleDelete={handleDelete} handleEdit={handleEdit} />
       )}
     </Container>
