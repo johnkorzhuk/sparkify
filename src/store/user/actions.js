@@ -46,7 +46,7 @@ export const getEnteredGiveaways = (firebase, uid) => async dispatch => {
   try {
     dispatch(setLoadingAction(true))
 
-    const snapshot = await firebase.usersCollection
+    const snapshot = await firebase.users
       .doc(uid)
       .collection("enteredGiveaways")
       .get()
@@ -70,7 +70,7 @@ export const getCreatedGiveaways = (firebase, uid) => async dispatch => {
   try {
     dispatch(setLoadingAction(true))
 
-    const snapshot = await firebase.usersCollection
+    const snapshot = await firebase.users
       .doc(uid)
       .collection("createdGiveaways")
       .get()

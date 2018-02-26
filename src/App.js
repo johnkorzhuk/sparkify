@@ -14,15 +14,17 @@ import LoginPage from "./containers/LoginPage"
 import SubmitGiveawayPage from "./containers/SubmitGiveawayPage"
 import GiveawayPage from "./containers/GiveawayPage"
 import GiveawaysPage from "./containers/GiveawaysPage"
+import ProfilePage from "./containers/ProfilePage"
 
-// import { generateGiveaways } from "./store/giveaways/utils"
+import { generateGiveaways } from "./store/giveaways/utils"
 
 class App extends Component {
   async componentDidMount() {
     const { startListeningToAuthChanges } = this.props
     this.authListener = startListeningToAuthChanges(firebase)
 
-    // const { generated, created } = generateGiveaways(50)
+    // const myUid = "8AXsoYcBGzMm3BSdBUqVZDvO8q92"
+    // const { generated, created } = generateGiveaways(50, myUid)
 
     // await Promise.all([
     //   ...generated.map(data =>
@@ -31,27 +33,26 @@ class App extends Component {
     //       .doc(data.id)
     //       .set(data),
     //   ),
-    //   ...created.map(id => {
+    //   ...created.map(item => {
     //     return firebase.store
     //       .collection("users")
-    //       .doc("oNFMES0YaOfyfAsEjY4AImsTwl22")
+    //       .doc(myUid)
     //       .collection("createdGiveaways")
-    //       .doc(id)
-    //       .set({
-    //         id,
-    //       })
+    //       .doc(item.id)
+    //       .set(item)
     //   }),
     //   ...generated
     //     .map(data => {
     //       if (Math.random() >= 0.7) {
     //         return firebase.store
     //           .collection("users")
-    //           .doc("oNFMES0YaOfyfAsEjY4AImsTwl22")
+    //           .doc(myUid)
     //           .collection("enteredGiveaways")
     //           .doc(data.id)
     //           .set({
     //             id: data.id,
     //             date: new Date(),
+    //             createdBy: data.createdBy.uid,
     //           })
     //       } else {
     //         return null
@@ -74,6 +75,7 @@ class App extends Component {
             <Route path="/register" component={LoginPage} />
             <Route path="/submit" component={SubmitGiveawayPage} />
             <Route path="/giveaways" component={GiveawaysPage} />
+            <Route path="/profile" component={ProfilePage} />
             <Route path="/:giveawayId" component={GiveawayPage} />
           </Switch>
           <Footer />

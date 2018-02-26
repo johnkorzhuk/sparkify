@@ -8,6 +8,7 @@ const cors = require("cors")
 const serviceAccount = require("./service-account.json")
 
 const { cleanupExpired } = require("./controllers/expired/index.js")
+const { getGiveaways } = require("./controllers/giveaways/index.js")
 const { deleteCollection } = require("./helpers/deleteCollection/index.js")
 
 const ALGOLIA_ID = functions.config().algolia.app_id
@@ -29,7 +30,7 @@ admin.initializeApp({
 })
 
 app.delete("/expired", cleanupExpired(admin, functions.config().cron.key))
-// app.get("/users/username", cleanupExpired(admin, functions.config().cron.key))
+app.post("/giveaways", getGiveaways(admin))
 
 exports.app = functions.https.onRequest(app)
 

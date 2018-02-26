@@ -11,6 +11,9 @@ export const authProviders = {
   twitter: {},
 }
 
+export const appEndpoint =
+  "https://us-central1-sparkify-30f42.cloudfunctions.net/app"
+
 class Firebase {
   constructor(config, custom) {
     firebase.initializeApp(config)
@@ -20,7 +23,7 @@ class Firebase {
     this._configure(custom)
   }
 
-  async _configure({ offline, authProviders }) {
+  async _configure({ offline, authProviders, api }) {
     if (offline) {
       try {
         await this._firebase.firestore().enablePersistence()
@@ -34,6 +37,14 @@ class Firebase {
           console.warn("The current browser does not support offline usage")
         }
       }
+    }
+
+    if (api) {
+      Object.entries(api).forEach(([key, value]) => {
+        this.api = {
+          [key]: value,
+        }
+      })
     }
 
     Object.keys(authProviders).forEach(provider => {
@@ -87,16 +98,16 @@ class Firebase {
     }
   }
 
-  get usersCollection() {
+  get users() {
     return this.store.collection("users")
   }
 
-  get giveawaysCollection() {
+  get giveaways() {
     return this.store.collection("giveaways")
   }
 
-  get expiredGiveawaysCollection() {
-    return this.store.collection("expiredGiveaways")
+  get removedGiveaways() {
+    return this.store.collection("removedGiveaways")
   }
 }
 
@@ -112,5 +123,8 @@ export default new Firebase(
   {
     offline: true,
     authProviders,
+    api: {
+      app: appEndpoint,
+    },
   },
 )

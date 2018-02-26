@@ -36,7 +36,10 @@ class GiveawaySubmitPageContainer extends Component {
               ...values,
               created: new Date(Date.now()),
               approved: false,
-              createdBy: user.uid,
+              createdBy: {
+                uid: user.uid,
+                username: user.displayName,
+              },
               images: [storageData.downloadURL],
               id,
             }),

@@ -135,9 +135,11 @@ const GiveawayPage = ({
         marginX={10}
       />
       <SeeAllContainer>
-        <Button type="primary" size="large">
-          See All Giveaways
-        </Button>
+        <Link to="/giveaways">
+          <Button type="primary" size="large">
+            See All Giveaways
+          </Button>
+        </Link>
       </SeeAllContainer>
       <PromoContainer>
         <h3>Want to promote your giveaway with Sparkify?</h3>

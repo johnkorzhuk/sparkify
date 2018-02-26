@@ -28,7 +28,7 @@ export const cleanupExpired = (admin, cronKey) => async (req, res) => {
       .get()
 
     if (snap.empty) {
-      return res.sendStatus(200)
+      return res.sendStatus(204)
     }
 
     const deleteBatch = admin.firestore().batch()
@@ -53,7 +53,7 @@ export const cleanupExpired = (admin, cronKey) => async (req, res) => {
     })
 
     await Promise.all([deleteBatch.commit(), moveBatch.commit()])
-    return res.sendStatus(204)
+    return res.sendStatus(200)
   } catch (error) {
     console.error(error)
   }

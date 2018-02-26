@@ -85,7 +85,7 @@ export const getGiveawaysFromStore = storeQuery => async dispatch => {
 
 export const getGiveawaysFromAlgolia = (
   query,
-  { carousel },
+  { carousel } = {},
 ) => async dispatch => {
   dispatch(setLoadingAction(true))
 
@@ -120,7 +120,7 @@ export const getGiveawayById = (firebase, history, id) => async dispatch => {
   try {
     dispatch(setLoadingAction(true))
 
-    const snap = await firebase.giveawaysCollection.doc(id).get()
+    const snap = await firebase.giveaways.doc(id).get()
     dispatch(setLoadingAction(false))
 
     if (snap.exists) {

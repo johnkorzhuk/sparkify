@@ -11,7 +11,6 @@ import {
   setAllLoaded,
 } from "../store/giveaways/actions"
 import { resetAllFilters } from "../store/giveaways/filters/actions"
-import { getEnteredGiveaways, getCreatedGiveaways } from "../store/user/actions"
 import {
   selectFilterFieldChangedState,
   selectFilterState,
@@ -28,15 +27,7 @@ class GiveawaysPageContainer extends Component {
   page = 0
 
   async componentDidMount() {
-    const {
-      getGiveawaysFromStore,
-      sort,
-      uid,
-      category,
-      type,
-      getEnteredGiveaways,
-      getCreatedGiveaways,
-    } = this.props
+    const { getGiveawaysFromStore, sort, uid, category, type } = this.props
 
     const giveawaysQuery = this.generateGiveawaysQuery({
       sort,
@@ -172,7 +163,7 @@ class GiveawaysPageContainer extends Component {
         return aggr.where(curr, "==", queryFilters[curr])
       }
       return aggr
-    }, firebase.giveawaysCollection)
+    }, firebase.giveaways)
   }
 
   render() {
@@ -225,7 +216,5 @@ export default connect(
     resetAllFilters,
     setAllLoaded,
     addItemsToPage,
-    getEnteredGiveaways,
-    getCreatedGiveaways,
   },
 )(GiveawaysPageContainer)

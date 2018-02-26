@@ -84,6 +84,7 @@ export const signup = (
     if (provider) {
       const data = await auth.signInWithPopup(provider)
       dispatch(loginAction(data.user))
+
       await setUserData(data.user.uid, {
         joined: new Date(Date.now()),
         email: data.user.email,
@@ -98,6 +99,10 @@ export const signup = (
         username,
       })
     }
+
+    await auth.currentUser.updateProfile({
+      displayName: username,
+    })
   } catch (error) {
     console.log(error)
     // TODO: give user more useful info
@@ -121,7 +126,6 @@ export const startListeningToAuthChanges = firebase => (dispatch, getState) => {
     if (user) {
       dispatch(loginAction(user))
 
-      // TODO: look into batching these results
       getEnteredGiveaways(firebase, user.uid)(dispatch, getState)
       getCreatedGiveaways(firebase, user.uid)(dispatch, getState)
     } else {

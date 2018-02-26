@@ -4,6 +4,8 @@ import { Input, Checkbox, Cascader, Select, Button, Icon, Form } from "antd"
 
 import { CATEGORY_RESOURCES, TYPE_RESOURCES } from "../../config"
 
+import { CloseCircle } from "../icons/index"
+
 const { Option } = Select
 const FormItem = Form.Item
 
@@ -31,18 +33,6 @@ const SelectFormItem = styled(({ minWidth, ...props }) => (
   }
 `
 
-const CloseCircle = styled(({ hasInput, ...props }) => <Icon {...props} />)`
-  color: rgba(0, 0, 0, 0.25);
-  font-size: 12px;
-  cursor: ${({ hasInput }) => (hasInput ? "pointer" : "default")};
-  transition: color 0.3s ease, opacity 0.15s ease;
-  opacity: ${({ hasInput }) => (hasInput ? 1 : 0)};
-
-  &:hover {
-    color: rgba(0, 0, 0, 0.45);
-  }
-`
-
 const GiveawayFilters = ({
   search,
   category,
@@ -59,7 +49,6 @@ const GiveawayFilters = ({
         <Input
           suffix={
             <CloseCircle
-              type="close-circle"
               onClick={() => {
                 resetFilter("searchInput")
                 updateFilterSortOrder(["filter", "sort"])

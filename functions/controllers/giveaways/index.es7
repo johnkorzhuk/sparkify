@@ -1,0 +1,46 @@
+export const getGiveaways = admin => async (req, res) => {
+  if (!req.body) {
+    return res.status(400).json(new Error("Missing request body data"))
+  } else if (!req.body.ids) {
+    return res
+      .status(400)
+      .json(new Error("Missing ids properly on request body"))
+  }
+  try {
+    let { ids } = req.body
+    if (!Array.isArray(ids)) ids = [ids]
+
+    const ref = admin.firestore().collection("giveaways")
+    const removedRef = admin.firestore().collection("removedGiveaways")
+    const allSnapshot = await Promise.all(ids.map(id => ref.doc(id).get()))
+    let giveaways = []
+    let removed = []
+
+    allSnapshot.forEach(doc => {
+      if (!doc.exists) removed.push(doc.id)
+      else {
+        giveaways.push({
+          ...doc.data(),
+          removed: false,
+        })
+      }
+    })
+
+    if (removed.length > 0) {
+      const removedSnapshot = await Promise.all(
+        removed.map(id => removedRef.doc(id).get()),
+      )
+      removedSnapshot.forEach(doc => {
+        giveaways.push({
+          ...doc.data(),
+          removed: true,
+        })
+      })
+    }
+
+    return res.status(200).json(giveaways)
+  } catch (error) {
+    console.error(error)
+    return res.sendStatus(500)
+  }
+}

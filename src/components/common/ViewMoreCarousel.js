@@ -1,7 +1,7 @@
 import React from "react"
 import styled from "styled-components"
 import ReactIScroll from "react-iscroll"
-import iScroll from "iscroll/build/iscroll-lite"
+import iScroll from "iscroll"
 
 import GiveawayPreviewItem from "../GiveawayPreviewItem"
 
