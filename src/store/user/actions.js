@@ -1,9 +1,7 @@
 // ACTIONs
 export const SET_LOADING = "USER/SET_LOADING"
-export const ADD_ENTERED_GIVEAWAYS = "user/ADD_ENTERED_GIVEAWAYS"
-export const REMOVE_ENTERED_GIVEAWAYS = "user/REMOVE_ENTERED_GIVEAWAYS"
-export const ADD_CREATED_GIVEAWAYS = "user/ADD_CREATED_GIVEAWAYS"
-export const REMOVE_CREATED_GIVEAWAYS = "user/REMOVE_CREATED_GIVEAWAYS"
+export const ADD_GIVEAWAYS = "user/ADD_GIVEAWAYS"
+export const REMOVE_GIVEAWAY = "user/REMOVE_GIVEAWAY"
 
 // ACTION CREATORS
 export const setLoadingAction = loading => ({
@@ -13,31 +11,19 @@ export const setLoadingAction = loading => ({
   },
 })
 
-export const addEnteredGiveawaysAction = giveaways => ({
-  type: ADD_ENTERED_GIVEAWAYS,
+export const addGiveawayAction = (type, giveaways) => ({
+  type: ADD_GIVEAWAYS,
   payload: {
+    type,
     giveaways,
   },
 })
 
-export const addCreatedGiveawaysAction = giveaways => ({
-  type: ADD_CREATED_GIVEAWAYS,
+export const removeGiveawayAction = (id, type) => ({
+  type: REMOVE_GIVEAWAY,
   payload: {
-    giveaways,
-  },
-})
-
-export const removeEnteredGiveawaysAction = giveawayId => ({
-  type: REMOVE_ENTERED_GIVEAWAYS,
-  payload: {
-    giveawayId,
-  },
-})
-
-export const removeCreatedGiveawaysAction = giveawayId => ({
-  type: REMOVE_CREATED_GIVEAWAYS,
-  payload: {
-    giveawayId,
+    type,
+    id,
   },
 })
 
@@ -60,7 +46,7 @@ export const getEnteredGiveaways = (firebase, uid) => async dispatch => {
       giveaways[giveaway.id] = giveaway
     })
 
-    dispatch(addEnteredGiveawaysAction(giveaways))
+    dispatch(addGiveawayAction("entered", giveaways))
   } catch (error) {
     console.error(error)
   }
@@ -84,7 +70,7 @@ export const getCreatedGiveaways = (firebase, uid) => async dispatch => {
       giveaways[giveaway.id] = giveaway
     })
 
-    dispatch(addCreatedGiveawaysAction(giveaways))
+    dispatch(addGiveawayAction("created", giveaways))
   } catch (error) {
     console.error(error)
   }

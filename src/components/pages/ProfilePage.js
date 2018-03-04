@@ -1,5 +1,5 @@
-import React from "react"
-import { Route } from "react-router-dom"
+import React, { Component } from "react"
+import { Route, Redirect } from "react-router-dom"
 import styled from "styled-components"
 
 import { Container as DefaultContainer } from "../styled"
@@ -22,43 +22,55 @@ const ContentContain = styled.div`
   margin-left: 5%;
 `
 
-const ProfilePage = ({ profileGiveaways }) => {
-  const renderProfileGiveaways = Object.keys(profileGiveaways).length > 0
-  return (
-    <Container>
-      <NavContainer>
-        <ProfileNav />
-      </NavContainer>
-      <ContentContain>
-        <Route
-          path="/profile/history"
-          render={props =>
-            renderProfileGiveaways ? (
-              <ProfileGiveaways
-                {...props}
-                profileGiveaways={profileGiveaways}
-              />
-            ) : (
-              "loading..."
-            )
-          }
-        />
-        <Route
-          path="/profile/giveaways"
-          render={props =>
-            renderProfileGiveaways ? (
-              <ProfileGiveaways
-                {...props}
-                profileGiveaways={profileGiveaways}
-              />
-            ) : (
-              "loading..."
-            )
-          }
-        />
-      </ContentContain>
-    </Container>
-  )
+class ProfilePage extends Component {
+  componentDidMount() {
+    const { location, history } = this.props
+
+    if (location.pathname === "/profile") {
+      history.replace("/profile/settings")
+    }
+  }
+
+  render() {
+    const { profileGiveaways } = this.props
+    const renderProfileGiveaways = Object.keys(profileGiveaways).length > 0
+
+    return (
+      <Container>
+        <NavContainer>
+          <ProfileNav />
+        </NavContainer>
+        <ContentContain>
+          <Route
+            path="/profile/history"
+            render={props =>
+              renderProfileGiveaways ? (
+                <ProfileGiveaways
+                  {...props}
+                  profileGiveaways={profileGiveaways}
+                />
+              ) : (
+                "loading..."
+              )
+            }
+          />
+          <Route
+            path="/profile/giveaways"
+            render={props =>
+              renderProfileGiveaways ? (
+                <ProfileGiveaways
+                  {...props}
+                  profileGiveaways={profileGiveaways}
+                />
+              ) : (
+                "loading..."
+              )
+            }
+          />
+        </ContentContain>
+      </Container>
+    )
+  }
 }
 
 export default ProfilePage

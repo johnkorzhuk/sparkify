@@ -5,6 +5,7 @@ import { withRouter } from "react-router-dom"
 
 import firebase from "../services/firebase"
 import { selectGiveaways } from "../store/profile/selectors"
+import { deleteGiveaway } from "../store/giveaways/actions"
 import {
   resetGiveawayFilter,
   setGiveawayFilter,
@@ -35,8 +36,20 @@ class ProfileGiveaway extends Component {
     }
   }
 
+  handleDeleteGiveaway = id => {
+    const { deleteGiveaway, giveaways, uid } = this.props
+    const giveaway = giveaways.find(_giveaway => _giveaway.id === id)
+
+    deleteGiveaway(firebase, uid, giveaway)
+  }
+
   render() {
-    return <GiveawaysList {...this.props} />
+    return (
+      <GiveawaysList
+        {...this.props}
+        onDeleteGiveaway={this.handleDeleteGiveaway}
+      />
+    )
   }
 }
 
@@ -51,9 +64,15 @@ const enhance = compose(
         search: state.profile.giveaways.filter,
         giveaways: selectGiveaways(type)(state),
         loading: state.profile.giveaways.loading,
+        uid: state.auth.user.uid,
       }
     },
-    { resetGiveawayFilter, setGiveawayFilter, getGiveaways },
+    {
+      resetGiveawayFilter,
+      setGiveawayFilter,
+      getGiveaways,
+      deleteGiveaway,
+    },
   ),
 )
 

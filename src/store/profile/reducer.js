@@ -3,6 +3,7 @@ import {
   RESET_GIVEAWAY_FILTER,
   SET_GIVEAWAY_FILTER,
   ADD_GIVEAWAYS,
+  REMOVE_GIVEAWAY,
 } from "./actions"
 
 export const INITIAL_STATE = {
@@ -31,6 +32,17 @@ export default (state = INITIAL_STATE, action) => {
         giveaways: {
           ...state.giveaways,
           [action.payload.type]: [...action.payload.giveaways],
+        },
+      }
+
+    case REMOVE_GIVEAWAY:
+      return {
+        ...state,
+        giveaways: {
+          ...state.giveaways,
+          [action.payload.type]: state.giveaways[action.payload.type].filter(
+            giveaway => giveaway.id !== action.payload.id,
+          ),
         },
       }
 

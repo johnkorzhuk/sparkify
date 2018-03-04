@@ -15,3 +15,15 @@ export const CloseCircle = styled(({ hasInput, ...props }) => (
     color: rgba(0, 0, 0, 0.45);
   }
 `
+
+export const StatusApproved = props => {
+  return <Icon type="check-circle-o" {...props} />
+}
+
+export const StatusPending = props => {
+  return <Icon type="exclamation-circle-o" {...props} />
+}
+
+export const StatusDeclined = props => {
+  return <Icon type="close-circle-o" {...props} />
+}

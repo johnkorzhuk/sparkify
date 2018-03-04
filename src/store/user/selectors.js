@@ -1,2 +1,2 @@
-export const selectEnteredGiveaways = state => state.user.enteredGiveaways
-export const selectCreatedGiveaways = state => state.user.createdGiveaways
+export const selectEnteredGiveaways = state => state.user.giveaways.entered
+export const selectCreatedGiveaways = state => state.user.giveaways.created

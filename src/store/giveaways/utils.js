@@ -22,8 +22,8 @@ export const generateGiveaways = (amount, uid) => {
     const createdByMe = Math.random() > 0.8
     const id = shortId.generate()
     const createdOn = faker.date.between(
-      new Date(1518901200000 - 3456000000),
-      new Date(1518901200000 - 259200000),
+      new Date(Date.now() - 3456000000),
+      new Date(Date.now() - 259200000),
     )
     if (createdByMe)
       created.push({
@@ -43,8 +43,8 @@ export const generateGiveaways = (amount, uid) => {
       location: getRandomValueFromArray(LOCATIONS),
       createdBy: createdByMe ? me : getRandomValueFromArray(uids),
       endDate: faker.date.between(
-        new Date(1518901200000),
-        new Date(1522540800000),
+        new Date(Date.now() - 172800000),
+        new Date(Date.now() + 1296000000),
       ),
       createdOn,
       id,

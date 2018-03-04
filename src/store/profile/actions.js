@@ -5,6 +5,7 @@ export const SET_LOADING = "profile/SET_LOADING"
 export const RESET_GIVEAWAY_FILTER = "profile/RESET_GIVEAWAY_FILTER"
 export const SET_GIVEAWAY_FILTER = "profile/SET_GIVEAWAY_FILTER"
 export const ADD_GIVEAWAYS = "profile/ADD_GIVEAWAYS"
+export const REMOVE_GIVEAWAY = "profile/REMOVE_GIVEAWAY"
 
 // ACTION CREATORS
 export const setLoadingAction = loading => ({
@@ -30,6 +31,14 @@ export const addGiveawaysAction = (giveaways, type) => ({
   type: ADD_GIVEAWAYS,
   payload: {
     giveaways,
+    type,
+  },
+})
+
+export const removeGiveawayAction = (id, type) => ({
+  type: REMOVE_GIVEAWAY,
+  payload: {
+    id,
     type,
   },
 })

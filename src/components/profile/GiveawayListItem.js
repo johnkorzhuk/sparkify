@@ -1,26 +1,28 @@
 import React from "react"
 import styled from "styled-components"
-import { Icon } from "antd"
+import { Popconfirm, Icon } from "antd"
 
 import { CATEGORY_RESOURCES } from "../../config"
 
+import { StatusApproved, StatusDeclined, StatusPending } from "../icons/index"
 import Countdown from "../common/Countdown"
+
+const PRIMARY_COLOR = "#444"
 
 const Container = styled.div`
   margin-bottom: 30px;
   display: flex;
   align-items: center;
+  position: relative;
 `
 
 const Item = styled.span`
-  margin: 0 20px;
-
-  &:first-child {
-    margin-left: 0;
-  }
+  margin-right: 20px;
+  width: ${({ width }) => width};
 
   &:last-child {
-    margin-left: 0;
+    margin-right: 0;
+    padding-right: 20px;
   }
 `
 
@@ -30,6 +32,7 @@ const ActionItemsContainer = Item.withComponent("div").extend`
 
 const ActionItem = styled.div`
   cursor: pointer;
+
   &:first-child {
     margin-right: 20px;
   }
@@ -37,7 +40,7 @@ const ActionItem = styled.div`
 
 const StyledIcon = styled(({ Icon, ...props }) => <Icon {...props} />)`
   font-size: 26px;
-  color: #444;
+  color: ${PRIMARY_COLOR};
 `
 
 const countdownRenderer = ({ days, hours, minutes, seconds }) => {
@@ -58,15 +61,36 @@ const countdownRenderer = ({ days, hours, minutes, seconds }) => {
   )
 }
 
-const ActionItems = ({ handleDelete, handleEdit }) => {
+const ActionItems = ({
+  onDeleteGiveaway,
+  onEditGiveaway,
+  width,
+  id,
+  ended,
+}) => {
   return (
-    <ActionItemsContainer>
-      <ActionItem>
-        <Icon type="edit" color="#999" />
-      </ActionItem>
-      <ActionItem>
-        <Icon type="delete" color="#999" />
-      </ActionItem>
+    <ActionItemsContainer width={width}>
+      {!ended && (
+        <ActionItem>
+          <Icon type="edit" color={PRIMARY_COLOR} />
+        </ActionItem>
+      )}
+      {!ended && (
+        <ActionItem>
+          <Popconfirm
+            title="Are you sure you want to permanently delete this giveaway?"
+            onConfirm={() => {
+              onDeleteGiveaway(id)
+            }}
+            okText="Yes"
+            cancelText="No"
+            placement="topRight"
+            arrowPointAtCenter
+          >
+            <Icon type="delete" color={PRIMARY_COLOR} />
+          </Popconfirm>
+        </ActionItem>
+      )}
     </ActionItemsContainer>
   )
 }
@@ -76,26 +100,51 @@ const GiveawayListItem = ({
   title,
   endDate,
   value,
-  handleDelete,
-  handleEdit,
+  onDeleteGiveaway,
+  onEditGiveaway,
   pageType,
   createdBy,
+  declined,
+  approved,
+  id,
 }) => {
   const { Icon } = CATEGORY_RESOURCES[category]
+  const created = pageType === "created"
+  const entered = pageType === "entered"
+  const ended = Date.parse(endDate) <= Date.now()
 
   return (
     <Container>
-      <Item>
+      <Item width="5%">
         <StyledIcon Icon={Icon} />
       </Item>
-      <Item>${value}</Item>
-      <Item>{title}</Item>
-      {pageType === "entered" && <Item>{createdBy.username}</Item>}
-      <Item>
+      <Item width="8%">${value}</Item>
+      <Item width={created ? "51%" : "45%"}>{title}</Item>
+      {entered && (
+        <Item width={created ? "30%" : "28%"}>{createdBy.username}</Item>
+      )}
+      <Item width="15%">
         <Countdown date={endDate} renderer={countdownRenderer} />
       </Item>
-      {pageType === "created" && (
-        <ActionItems handleDelete={handleDelete} handleEdit={handleEdit} />
+      {created && (
+        <ActionItems
+          onDeleteGiveaway={onDeleteGiveaway}
+          onEditGiveaway={onEditGiveaway}
+          width="10%"
+          id={id}
+          ended={ended}
+        />
+      )}
+      {created && (
+        <Item width="7%">
+          {!ended && approved && <StatusApproved style={{ color: "green" }} />}
+          {!ended &&
+            !approved &&
+            !declined && <StatusPending style={{ color: "orange" }} />}
+          {!ended &&
+            !approved &&
+            declined && <StatusDeclined style={{ color: "red" }} />}
+        </Item>
       )}
     </Container>
   )

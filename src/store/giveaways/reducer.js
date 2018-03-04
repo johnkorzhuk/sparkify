@@ -2,6 +2,7 @@ import { combineReducers } from "redux"
 
 import {
   ADD,
+  REMOVE,
   SET_ALL_LOADED,
   SET_LOADING,
   SET_ERROR,
@@ -34,6 +35,16 @@ export const rootReducer = (state = INITIAL_STATE, action) => {
         all: {
           ...state.all,
           ...action.payload.giveaways,
+        },
+      }
+
+    case REMOVE:
+      const { [action.payload.id]: removedGiveaway, ...rest } = state.all
+
+      return {
+        ...state,
+        all: {
+          ...rest,
         },
       }
 

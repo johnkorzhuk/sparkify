@@ -95,7 +95,11 @@ const countdownRenderer = ({ days, hours, minutes, seconds }) => {
       </span>
     )
   }
-  return <span>Ending In: {days > 1 ? "days" : "day"}</span>
+  return (
+    <span>
+      Ending In: {days} {days > 1 ? "days" : "day"}
+    </span>
+  )
 }
 
 const GiveawayPage = ({

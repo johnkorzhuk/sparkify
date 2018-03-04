@@ -23,7 +23,7 @@ class App extends Component {
     const { startListeningToAuthChanges } = this.props
     this.authListener = startListeningToAuthChanges(firebase)
 
-    // const myUid = "8AXsoYcBGzMm3BSdBUqVZDvO8q92"
+    // const myUid = "ENSBOGKcsBUyuAd6eGHBHzqZxqA3"
     // const { generated, created } = generateGiveaways(50, myUid)
 
     // await Promise.all([

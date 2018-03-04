@@ -1,5 +1,11 @@
+import { message } from "antd"
+
+import { removeGiveawayAction as removeProfileGiveawayAction } from "../profile/actions"
+import { removeGiveawayAction as removeUserGiveawayAction } from "../user/actions"
+
 // ACTIONS
 export const ADD = "giveaways/ADD_GIVEAWAY"
+export const REMOVE = "giveaways/REMOVE_GIVEAWAY"
 export const SET_ALL_LOADED = "giveaways/SET_ALL_LOADED"
 export const SET_LOADING = "giveaways/SET_LOADING"
 export const SET_ERROR = "giveaways/ERROR"
@@ -12,6 +18,13 @@ export const addGiveawaysAction = giveaways => ({
   type: ADD,
   payload: {
     giveaways,
+  },
+})
+
+export const removeGiveawayAction = id => ({
+  type: REMOVE,
+  payload: {
+    id,
   },
 })
 
@@ -137,6 +150,39 @@ export const getGiveawayById = (firebase, history, id) => async dispatch => {
     console.log(error)
     dispatch(setErrorAction(error.message))
   }
+}
+
+export const deleteGiveaway = (firebase, uid, giveaway) => async dispatch => {
+  try {
+    dispatch(setLoadingAction(true))
+
+    if (!giveaway.removed) {
+      const { removed, ...rest } = giveaway
+      const removedGiveaway = {
+        ...rest,
+        removeMethod: "DELETE",
+      }
+
+      await Promise.all([
+        firebase.giveaways.doc(removedGiveaway.id).delete(),
+        firebase.users
+          .doc(uid)
+          .collection("createdGiveaways")
+          .doc(removedGiveaway.id)
+          .delete(),
+      ])
+
+      dispatch(removeGiveawayAction(removedGiveaway.id))
+    } else {
+      await firebase.removedGiveaways.doc(giveaway.id).update({
+        removeMethod: "DELETE",
+      })
+    }
+    message.success("Deleted giveaway")
+    dispatch(removeProfileGiveawayAction(giveaway.id, "created"))
+    dispatch(removeUserGiveawayAction(giveaway.id, "created"))
+    dispatch(setLoadingAction(false))
+  } catch (error) {}
 }
 
 export const addItemsToPage = amount => dispatch => {
