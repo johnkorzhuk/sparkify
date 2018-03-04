@@ -38,6 +38,7 @@ const GiveawayList = ({
   setGiveawayFilter,
   resetGiveawayFilter,
   onDeleteGiveaway,
+  onEditGiveaway,
   search,
   giveaways,
   type,
@@ -61,6 +62,7 @@ const GiveawayList = ({
                   ownGiveaways={ownGiveaways}
                   pageType={type}
                   onDeleteGiveaway={onDeleteGiveaway}
+                  onEditGiveaway={onEditGiveaway}
                 />
               )
             })}

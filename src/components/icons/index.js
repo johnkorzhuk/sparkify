@@ -27,3 +27,11 @@ export const StatusPending = props => {
 export const StatusDeclined = props => {
   return <Icon type="close-circle-o" {...props} />
 }
+
+export const Edit = props => {
+  return <Icon type="edit" {...props} />
+}
+
+export const Delete = props => {
+  return <Icon type="delete" {...props} />
+}

@@ -120,3 +120,12 @@ export const TYPE_RESOURCES = {
     label: "Comment Entry",
   },
 }
+
+export const statusCodes = {
+  100: "pending",
+  200: "approved",
+  400: "declined",
+  401: "inappropriate",
+  402: "invalid",
+  403: "inaccurate",
+}

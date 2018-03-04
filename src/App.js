@@ -15,6 +15,7 @@ import SubmitGiveawayPage from "./containers/SubmitGiveawayPage"
 import GiveawayPage from "./containers/GiveawayPage"
 import GiveawaysPage from "./containers/GiveawaysPage"
 import ProfilePage from "./containers/ProfilePage"
+import ScrollToTop from "./containers/ScrollToTop"
 
 import { generateGiveaways } from "./store/giveaways/utils"
 
@@ -33,6 +34,7 @@ class App extends Component {
     //       .doc(data.id)
     //       .set(data),
     //   ),
+    //   // created
     //   ...created.map(item => {
     //     return firebase.store
     //       .collection("users")
@@ -41,6 +43,7 @@ class App extends Component {
     //       .doc(item.id)
     //       .set(item)
     //   }),
+    //   // entered
     //   ...generated
     //     .map(data => {
     //       if (Math.random() >= 0.7) {
@@ -68,16 +71,18 @@ class App extends Component {
       <Router>
         <div className="App">
           <Header authenticated={authenticated} />
-          <Switch>
-            <Route path="/" exact component={HomePage} />
-            <Route path="/login" component={LoginPage} />
-            <Route path="/faq" component={FAQPage} />
-            <Route path="/register" component={LoginPage} />
-            <Route path="/submit" component={SubmitGiveawayPage} />
-            <Route path="/giveaways" component={GiveawaysPage} />
-            <Route path="/profile" component={ProfilePage} />
-            <Route path="/:giveawayId" component={GiveawayPage} />
-          </Switch>
+          <ScrollToTop>
+            <Switch>
+              <Route path="/" exact component={HomePage} />
+              <Route path="/login" component={LoginPage} />
+              <Route path="/faq" component={FAQPage} />
+              <Route path="/register" component={LoginPage} />
+              <Route path="/submit" component={SubmitGiveawayPage} />
+              <Route path="/giveaways" component={GiveawaysPage} />
+              <Route path="/profile" component={ProfilePage} />
+              <Route path="/:giveawayId" component={GiveawayPage} />
+            </Switch>
+          </ScrollToTop>
           <Footer />
         </div>
       </Router>

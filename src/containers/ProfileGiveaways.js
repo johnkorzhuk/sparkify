@@ -28,10 +28,10 @@ class ProfileGiveaway extends Component {
     resetGiveawayFilter()
   }
 
-  async getGiveawayData() {
+  getGiveawayData() {
     const { type, getGiveaways, profileGiveaways, giveaways } = this.props
 
-    if (profileGiveaways) {
+    if (!giveaways.length > 0) {
       getGiveaways(firebase, profileGiveaways, type)
     }
   }
@@ -43,10 +43,15 @@ class ProfileGiveaway extends Component {
     deleteGiveaway(firebase, uid, giveaway)
   }
 
+  handleEditGiveaway = id => {
+    console.log(id)
+  }
+
   render() {
     return (
       <GiveawaysList
         {...this.props}
+        onEditGiveaway={this.handleEditGiveaway}
         onDeleteGiveaway={this.handleDeleteGiveaway}
       />
     )

@@ -67,13 +67,18 @@ export const getGiveaways = (
 
     const giveaways = data.map(giveaway => {
       if (type === "entered") {
+        const { date, ...rest } = profileGiveaways[giveaway.id]
         return {
+          ...rest,
           ...giveaway,
-          enteredOn: profileGiveaways[giveaway.id].date,
+          enteredOn: date,
         }
       }
 
-      return giveaway
+      return {
+        ...profileGiveaways[giveaway.id],
+        ...giveaway,
+      }
     })
 
     dispatch(addGiveawaysAction(giveaways, type))

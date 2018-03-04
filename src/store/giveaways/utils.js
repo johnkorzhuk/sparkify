@@ -5,9 +5,7 @@ import firebase from "../../services/firebase"
 import { CATEGORY_RESOURCES, TYPE_RESOURCES, LOCATIONS } from "../../config"
 
 export const generateGiveaways = (amount, uid) => {
-  const defaults = {
-    approved: false,
-  }
+  const defaults = {}
   let generated = []
   let created = []
   const me = { uid, username: "johnkorz" }
@@ -25,11 +23,48 @@ export const generateGiveaways = (amount, uid) => {
       new Date(Date.now() - 3456000000),
       new Date(Date.now() - 259200000),
     )
-    if (createdByMe)
-      created.push({
+    if (createdByMe) {
+      const random = Math.random()
+      let approvalStatus = {
+        status: 200,
+        message: "Your submission has been approved!",
+        errors: {},
+      }
+
+      if (random <= 0.33) {
+        approvalStatus = {
+          ...approvalStatus,
+          message: "Your submission is under review.",
+          status: 100,
+        }
+      } else if (random <= 0.66) {
+        approvalStatus = {
+          ...approvalStatus,
+          status: 400,
+          message: "Your submission has been declined.",
+          errors: {
+            fields: {
+              title: [401],
+              description: [401, 403],
+              link: [402],
+              value: [403],
+              location: [403],
+              type: [403],
+              category: [403],
+              images: [401, 402, 403],
+            },
+          },
+        }
+      }
+
+      let createdGiveaway = {
         id,
         createdOn,
-      })
+        approvalStatus,
+      }
+
+      created.push(createdGiveaway)
+    }
 
     generated.push({
       ...defaults,

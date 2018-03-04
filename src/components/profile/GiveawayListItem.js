@@ -1,10 +1,16 @@
-import React from "react"
+import React, { Fragment } from "react"
 import styled from "styled-components"
-import { Popconfirm, Icon } from "antd"
+import { Popconfirm, Icon, Popover } from "antd"
 
-import { CATEGORY_RESOURCES } from "../../config"
+import { CATEGORY_RESOURCES, statusCodes } from "../../config"
 
-import { StatusApproved, StatusDeclined, StatusPending } from "../icons/index"
+import {
+  StatusApproved,
+  StatusDeclined,
+  StatusPending,
+  Edit,
+  Delete,
+} from "../icons/index"
 import Countdown from "../common/Countdown"
 
 const PRIMARY_COLOR = "#444"
@@ -17,12 +23,18 @@ const Container = styled.div`
 `
 
 const Item = styled.span`
-  margin-right: 20px;
+  margin-left: 20px;
   width: ${({ width }) => width};
 
+  &:first-child {
+    margin-left: 0;
+  }
+
   &:last-child {
-    margin-right: 0;
-    padding-right: 20px;
+    margin-right: 15px;
+    margin-left: 0;
+    padding-left: 20px;
+    padding-right: 10px;
   }
 `
 
@@ -31,14 +43,21 @@ const ActionItemsContainer = Item.withComponent("div").extend`
 `
 
 const ActionItem = styled.div`
-  cursor: pointer;
-
   &:first-child {
     margin-right: 20px;
   }
 `
 
-const StyledIcon = styled(({ Icon, ...props }) => <Icon {...props} />)`
+const ActionIcon = styled(({ Icon, disabled, ...props }) => (
+  <Icon {...props} />
+))`
+  font-size: 14px;
+  color: ${({ disabled }) =>
+    disabled ? "rgba(0, 0, 0, 0.25)" : PRIMARY_COLOR};
+  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+`
+
+const CategoryIcon = styled(({ Icon, ...props }) => <Icon {...props} />)`
   font-size: 26px;
   color: ${PRIMARY_COLOR};
 `
@@ -67,31 +86,84 @@ const ActionItems = ({
   width,
   id,
   ended,
+  approvalStatus,
 }) => {
+  const approved = approvalStatus.status === 200
+
   return (
     <ActionItemsContainer width={width}>
       {!ended && (
         <ActionItem>
-          <Icon type="edit" color={PRIMARY_COLOR} />
+          <ActionIcon
+            Icon={Edit}
+            disabled={approved}
+            onClick={() => {
+              if (!approved) onEditGiveaway(id)
+            }}
+          />
         </ActionItem>
       )}
       {!ended && (
-        <ActionItem>
-          <Popconfirm
-            title="Are you sure you want to permanently delete this giveaway?"
-            onConfirm={() => {
-              onDeleteGiveaway(id)
-            }}
-            okText="Yes"
-            cancelText="No"
-            placement="topRight"
-            arrowPointAtCenter
-          >
-            <Icon type="delete" color={PRIMARY_COLOR} />
-          </Popconfirm>
-        </ActionItem>
+        <Popconfirm
+          title="Are you sure you want to permanently delete this giveaway?"
+          onConfirm={() => {
+            onDeleteGiveaway(id)
+          }}
+          okText="Yes"
+          cancelText="No"
+          placement="topRight"
+          arrowPointAtCenter
+        >
+          <ActionItem>
+            <ActionIcon Icon={Delete} />
+          </ActionItem>
+        </Popconfirm>
       )}
     </ActionItemsContainer>
+  )
+}
+
+const Status = ({ ended, approvalStatus }) => {
+  const status = `${statusCodes[approvalStatus.status]
+    .slice(0, 1)
+    .toUpperCase()}${statusCodes[approvalStatus.status].slice(
+    1,
+    statusCodes[approvalStatus.status].length,
+  )}`
+  const statusContent = (
+    <Fragment>
+      <span>{approvalStatus.message}</span>
+      <br />
+      {Object.keys(approvalStatus.errors).length > 0 && (
+        <span>
+          Click <a>here</a> to find out why.
+        </span>
+      )}
+    </Fragment>
+  )
+
+  return (
+    <Popover
+      placement="topRight"
+      arrowPointAtCenter
+      title={status}
+      content={statusContent}
+    >
+      <Item width="7%">
+        {!ended &&
+          approvalStatus.status === 200 && (
+            <StatusApproved style={{ color: "green" }} />
+          )}
+        {!ended &&
+          approvalStatus.status === 100 && (
+            <StatusPending style={{ color: "orange" }} />
+          )}
+        {!ended &&
+          approvalStatus.status === 400 && (
+            <StatusDeclined style={{ color: "red" }} />
+          )}
+      </Item>
+    </Popover>
   )
 }
 
@@ -104,8 +176,7 @@ const GiveawayListItem = ({
   onEditGiveaway,
   pageType,
   createdBy,
-  declined,
-  approved,
+  approvalStatus,
   id,
 }) => {
   const { Icon } = CATEGORY_RESOURCES[category]
@@ -116,7 +187,7 @@ const GiveawayListItem = ({
   return (
     <Container>
       <Item width="5%">
-        <StyledIcon Icon={Icon} />
+        <CategoryIcon Icon={Icon} />
       </Item>
       <Item width="8%">${value}</Item>
       <Item width={created ? "51%" : "45%"}>{title}</Item>
@@ -133,19 +204,10 @@ const GiveawayListItem = ({
           width="10%"
           id={id}
           ended={ended}
+          approvalStatus={approvalStatus}
         />
       )}
-      {created && (
-        <Item width="7%">
-          {!ended && approved && <StatusApproved style={{ color: "green" }} />}
-          {!ended &&
-            !approved &&
-            !declined && <StatusPending style={{ color: "orange" }} />}
-          {!ended &&
-            !approved &&
-            declined && <StatusDeclined style={{ color: "red" }} />}
-        </Item>
-      )}
+      {created && <Status ended={ended} approvalStatus={approvalStatus} />}
     </Container>
   )
 }
