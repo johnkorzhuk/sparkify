@@ -1,9 +1,15 @@
-import { SET_LOADING, ADD_GIVEAWAYS, REMOVE_GIVEAWAY } from "./actions"
+import {
+  SET_LOADING,
+  ADD_GIVEAWAYS,
+  REMOVE_GIVEAWAY,
+  SET_GIVEAWAY_EDITING,
+} from "./actions"
 
 export const INITIA_STATE = {
   giveaways: {
     entered: {},
     created: {},
+    editing: null,
   },
   loading: false,
 }
@@ -40,6 +46,15 @@ export default (state = INITIA_STATE, action) => {
           [action.payload.type]: {
             ...rest,
           },
+        },
+      }
+
+    case SET_GIVEAWAY_EDITING:
+      return {
+        ...state,
+        giveaways: {
+          ...state.giveaways,
+          editing: action.payload.id,
         },
       }
 

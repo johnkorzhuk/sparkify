@@ -6,6 +6,7 @@ import { withRouter } from "react-router-dom"
 import firebase from "../services/firebase"
 import { selectGiveaways } from "../store/profile/selectors"
 import { deleteGiveaway } from "../store/giveaways/actions"
+import { setGiveawayEditing } from "../store/user/actions"
 import {
   resetGiveawayFilter,
   setGiveawayFilter,
@@ -44,7 +45,10 @@ class ProfileGiveaway extends Component {
   }
 
   handleEditGiveaway = id => {
-    console.log(id)
+    const { setGiveawayEditing, history } = this.props
+
+    setGiveawayEditing(id)
+    history.push(`/${id}`)
   }
 
   render() {
@@ -77,6 +81,7 @@ const enhance = compose(
       setGiveawayFilter,
       getGiveaways,
       deleteGiveaway,
+      setGiveawayEditing,
     },
   ),
 )

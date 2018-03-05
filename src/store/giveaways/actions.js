@@ -157,7 +157,7 @@ export const deleteGiveaway = (firebase, uid, giveaway) => async dispatch => {
     dispatch(setLoadingAction(true))
 
     if (!giveaway.removed) {
-      const { removed, ...rest } = giveaway
+      const { removed, approvalStatus, ...rest } = giveaway
       const removedGiveaway = {
         ...rest,
         removeMethod: "DELETE",
@@ -170,6 +170,7 @@ export const deleteGiveaway = (firebase, uid, giveaway) => async dispatch => {
           .collection("createdGiveaways")
           .doc(removedGiveaway.id)
           .delete(),
+        firebase.removedGiveaways.doc(removedGiveaway.id).set(removedGiveaway),
       ])
 
       dispatch(removeGiveawayAction(removedGiveaway.id))
@@ -182,7 +183,9 @@ export const deleteGiveaway = (firebase, uid, giveaway) => async dispatch => {
     dispatch(removeProfileGiveawayAction(giveaway.id, "created"))
     dispatch(removeUserGiveawayAction(giveaway.id, "created"))
     dispatch(setLoadingAction(false))
-  } catch (error) {}
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 export const addItemsToPage = amount => dispatch => {

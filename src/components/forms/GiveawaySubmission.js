@@ -1,8 +1,7 @@
-import React, { Component } from "react"
+import React from "react"
 import {
   Form,
   DatePicker,
-  TimePicker,
   Button,
   Input,
   InputNumber,
@@ -16,7 +15,6 @@ import {
 import { LOCATIONS, TYPE_RESOURCES, CATEGORY_RESOURCES } from "../../config"
 
 const FormItem = Form.Item
-const { MonthPicker } = DatePicker
 const { Option } = Select
 const { TextArea } = Input
 const RadioGroup = Radio.Group
@@ -114,7 +112,7 @@ const GiveawaySubmissionForm = ({
 
       <FormItem label="End date / time">
         {getFieldDecorator("endDate", timePickerConfig)(
-          <DatePicker showTime format="DD-MM-YYYY HH:mm:ss" />,
+          <DatePicker showTime format="MM-DD-YYYY HH:mm:ss" />,
         )}
       </FormItem>
 

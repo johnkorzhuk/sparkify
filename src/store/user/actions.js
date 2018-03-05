@@ -2,6 +2,7 @@
 export const SET_LOADING = "USER/SET_LOADING"
 export const ADD_GIVEAWAYS = "user/ADD_GIVEAWAYS"
 export const REMOVE_GIVEAWAY = "user/REMOVE_GIVEAWAY"
+export const SET_GIVEAWAY_EDITING = "user/SET_GIVEAWAY_EDITING"
 
 // ACTION CREATORS
 export const setLoadingAction = loading => ({
@@ -23,6 +24,13 @@ export const removeGiveawayAction = (id, type) => ({
   type: REMOVE_GIVEAWAY,
   payload: {
     type,
+    id,
+  },
+})
+
+export const setGiveawayEditingAction = id => ({
+  type: SET_GIVEAWAY_EDITING,
+  payload: {
     id,
   },
 })
@@ -74,4 +82,8 @@ export const getCreatedGiveaways = (firebase, uid) => async dispatch => {
   } catch (error) {
     console.error(error)
   }
+}
+
+export const setGiveawayEditing = id => dispatch => {
+  dispatch(setGiveawayEditingAction(id))
 }

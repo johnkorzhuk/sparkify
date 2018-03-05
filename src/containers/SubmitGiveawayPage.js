@@ -29,22 +29,18 @@ class GiveawaySubmitPageContainer extends Component {
           .put(image.originFileObj)
 
         await Promise.all([
-          firebase.store
-            .collection("giveaways")
-            .doc(id)
-            .set({
-              ...values,
-              created: new Date(Date.now()),
-              approved: false,
-              createdBy: {
-                uid: user.uid,
-                username: user.displayName,
-              },
-              images: [storageData.downloadURL],
-              id,
-            }),
-          firebase.store
-            .collection("users")
+          firebase.giveaways.doc(id).set({
+            ...values,
+            created: new Date(Date.now()),
+            approved: false,
+            createdBy: {
+              uid: user.uid,
+              username: user.displayName,
+            },
+            images: [storageData.downloadURL],
+            id,
+          }),
+          firebase.users
             .doc(user.uid)
             .collection("createdGiveaways")
             .doc(id)
@@ -81,12 +77,12 @@ class GiveawaySubmitPageContainer extends Component {
 }
 
 const enhance = compose(
+  Form.create(),
   connect(state => {
     return {
       user: state.auth.user,
     }
   }),
-  Form.create(),
 )
 
 export default enhance(GiveawaySubmitPageContainer)

@@ -17,12 +17,14 @@ export const generateGiveaways = (amount, uid) => {
   ]
 
   for (let i = 0; i < amount; i++) {
-    const createdByMe = Math.random() > 0.8
+    let approved = true
+    const createdByMe = Math.random() > 0.85
     const id = shortId.generate()
     const createdOn = faker.date.between(
       new Date(Date.now() - 3456000000),
       new Date(Date.now() - 259200000),
     )
+
     if (createdByMe) {
       const random = Math.random()
       let approvalStatus = {
@@ -32,12 +34,14 @@ export const generateGiveaways = (amount, uid) => {
       }
 
       if (random <= 0.33) {
+        approved = false
         approvalStatus = {
           ...approvalStatus,
           message: "Your submission is under review.",
           status: 100,
         }
       } else if (random <= 0.66) {
+        approved = false
         approvalStatus = {
           ...approvalStatus,
           status: 400,
@@ -74,6 +78,7 @@ export const generateGiveaways = (amount, uid) => {
       title: faker.lorem.words(getRandomInt(2, 5)),
       description: faker.lorem.words(getRandomInt(0, 25)),
       images: [faker.image.imageUrl()],
+      approved,
       link: faker.internet.url(),
       location: getRandomValueFromArray(LOCATIONS),
       createdBy: createdByMe ? me : getRandomValueFromArray(uids),

@@ -1,15 +1,20 @@
-import React from "react"
-import { Button } from "antd"
+import React, { Fragment } from "react"
+import { Button, Form } from "antd"
 import styled from "styled-components"
 import { Link } from "react-router-dom"
 
 import { CATEGORY_RESOURCES, TYPE_RESOURCES } from "../../config"
 
 import { Container as DefaultContainer } from "../styled"
+import GiveawayEdit from "../forms/GiveawayEdit"
+import { Edit, Close } from "../icons/index"
 import Countdown from "../common/Countdown"
 import ViewMoreCarousel from "../../containers/ViewMoreCarousel"
 
-const GiveawayContainer = styled.div`
+const GiveawayContainer = styled(
+  ({ isEditing, gradient, onSubmit, ...props }) =>
+    isEditing ? <Form {...props} onSubmit={onSubmit} /> : <div {...props} />,
+)`
   height: 500px;
   ${({ gradient }) => gradient};
   border-radius: 16px;
@@ -27,14 +32,16 @@ const ImageContainer = styled.div`
   border-bottom-left-radius: 16px;
 `
 
+// padding: ${({ isEditing }) => (isEditing ? "40px 25px 40px 55px" : "40px 25px 40px 55px")};
 const ContentContainer = styled.div`
   color: white;
-  padding: 40px;
   display: flex;
+  padding: 40px 25px 40px 55px;
   justify-content: center;
   flex-direction: column;
   font-size: 16px;
   flex: 1;
+  position: relative;
 
   > h3 {
     font-size: 2em;
@@ -51,12 +58,24 @@ const ContentContainer = styled.div`
   span {
     text-transform: capitalize;
   }
+`
 
-  > .ant-btn {
-    margin-top: 40px;
-    max-width: 200px;
-    font-size: 1.2em;
-  }
+const PrimaryButton = styled(Button)`
+  margin-top: 40px !important;
+  max-width: 200px !important;
+  font-size: 1.2em !important;
+`
+
+const Edit_CancelContainer = styled.div`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+`
+
+const Edit_CancelIcon = styled(({ Icon, ...props }) => <Icon {...props} />)`
+  color: white;
+  font-size: 26px;
+  cursor: pointer;
 `
 
 const SeeAllContainer = DefaultContainer.extend`
@@ -103,33 +122,69 @@ const countdownRenderer = ({ days, hours, minutes, seconds }) => {
 }
 
 const GiveawayPage = ({
-  category,
-  images,
-  title,
-  description,
-  value,
-  type,
-  location,
-  link,
-  endDate,
+  isEditing,
+  isOwner,
+  onSubmit,
+  onEdit,
+  onCancelEdit,
+  getFieldDecorator,
+  giveaway,
+  normFile,
+  onUpload,
 }) => {
+  const {
+    category,
+    images,
+    title,
+    description,
+    value,
+    type,
+    location,
+    link,
+    endDate,
+  } = giveaway
   const { gradient } = CATEGORY_RESOURCES[category]
 
   return (
     <div>
       <DefaultContainer>
-        <GiveawayContainer gradient={gradient}>
+        <GiveawayContainer
+          gradient={gradient}
+          isEditing={isEditing}
+          onSubmit={onSubmit}
+        >
           <ImageContainer image={images[0]} />
-          <ContentContainer>
-            <h3>{title}</h3>
-            <p>{description}</p>
-            <span>Value: ${value}</span>
-            <span>Sponsor: {type}</span>
-            <span>Location: {location}</span>
-            <Countdown date={endDate} renderer={countdownRenderer} />
-            <Button href="#" type="primary" size="large">
-              Enter Giveaway
-            </Button>
+          <ContentContainer isEditing={isEditing}>
+            {isOwner && (
+              <Edit_CancelContainer>
+                {isEditing ? (
+                  <Edit_CancelIcon Icon={Close} onClick={onCancelEdit} />
+                ) : (
+                  <Edit_CancelIcon Icon={Edit} onClick={onEdit} />
+                )}
+              </Edit_CancelContainer>
+            )}
+
+            {isEditing ? (
+              <GiveawayEdit
+                getFieldDecorator={getFieldDecorator}
+                {...giveaway}
+                normFile={normFile}
+                onUpload={onUpload}
+              />
+            ) : (
+              <Fragment>
+                <h3>{title}</h3>
+                <p>{description}</p>
+                <span>Value: ${value}</span>
+                <span>Sponsor: {type}</span>
+                <span>Location: {location}</span>
+                <Countdown date={endDate} renderer={countdownRenderer} />
+                <PrimaryButton href="#" type="primary" size="large">
+                  Enter Giveaway
+                </PrimaryButton>
+              </Fragment>
+            )}
           </ContentContainer>
         </GiveawayContainer>
       </DefaultContainer>

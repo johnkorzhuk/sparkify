@@ -35,3 +35,11 @@ export const Edit = props => {
 export const Delete = props => {
   return <Icon type="delete" {...props} />
 }
+
+export const Close = props => {
+  return <Icon type="close" {...props} />
+}
+
+export const Upload = props => {
+  return <Icon type="inbox" {...props} />
+}
