@@ -85,7 +85,7 @@ const I_SCROLL_OPTIONS = {
   disableTouch: false,
   disableMouse: true,
   mouseWheel: true,
-  scrollbars: true,
+  scrollbars: "custom",
   interactiveScrollbars: true,
 }
 
